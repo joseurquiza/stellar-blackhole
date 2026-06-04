@@ -30,7 +30,7 @@ export function BlackholeTool() {
         aria-hidden
       />
 
-      <div className="relative mx-auto w-full max-w-5xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+      <div className="relative mx-auto w-full max-w-screen-2xl px-4 py-10 sm:px-6 sm:py-14 lg:px-10 xl:px-16">
         <header className="mb-8 space-y-5">
           <div className="flex items-center gap-3">
             <div className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 ring-1 ring-primary/30">
