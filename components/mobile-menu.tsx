@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Menu, X, Rocket } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import Link from "next/link"
 import Image from "next/image"
 import { ThemeToggle } from "./theme-toggle"
@@ -60,17 +60,6 @@ export function MobileMenu() {
               <div className="flex items-center justify-between py-2 text-gray-300">
                 <span>Theme</span>
                 <ThemeToggle />
-              </div>
-
-              <div className="pt-4 border-t border-gray-800">
-                <Link
-                  href="https://app.action-tokens.com/"
-                  onClick={closeMenu}
-                  className="flex items-center gap-2 bg-gradient-to-r from-pink-600 to-purple-600 px-4 py-2 rounded-full text-white font-semibold"
-                >
-                  <Rocket className="w-4 h-4" />
-                  <span>Launch WebApp</span>
-                </Link>
               </div>
             </nav>
           </div>
