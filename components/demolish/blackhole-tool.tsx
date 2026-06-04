@@ -5,6 +5,7 @@ import { Skull, FlaskConical, ShieldCheck, Radio } from "lucide-react"
 import { LiveWizard } from "@/components/demolish/live-wizard"
 import { DemoModeSimulation } from "@/components/demolish/demo-mode"
 import { DemolishFaq } from "@/components/demolish/demolish-faq"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export function BlackholeTool() {
   const [demoMode, setDemoMode] = useState(false)
@@ -32,23 +33,26 @@ export function BlackholeTool() {
 
       <div className="relative mx-auto w-full max-w-screen-2xl px-4 py-10 sm:px-6 sm:py-14 lg:px-10 xl:px-16">
         <header className="mb-8 space-y-5">
-          <div className="flex items-center gap-3">
-            <div className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 ring-1 ring-primary/30">
-              <div
-                className="absolute inset-0 rounded-xl blur-md"
-                style={{ background: "radial-gradient(circle, hsl(var(--nova-core) / 0.5), transparent 70%)" }}
-                aria-hidden
-              />
-              <Skull className="relative h-6 w-6 text-primary" />
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 ring-1 ring-primary/30">
+                <div
+                  className="absolute inset-0 rounded-xl blur-md"
+                  style={{ background: "radial-gradient(circle, hsl(var(--nova-core) / 0.5), transparent 70%)" }}
+                  aria-hidden
+                />
+                <Skull className="relative h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold tracking-tight text-balance sm:text-3xl">
+                  Stellar BlackHole
+                </h1>
+                <p className="mt-0.5 text-sm text-muted-foreground text-pretty">
+                  Non-custodial cleanup and account merge.
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight text-balance sm:text-3xl">
-                Stellar BlackHole
-              </h1>
-              <p className="mt-0.5 text-sm text-muted-foreground text-pretty">
-                Non-custodial cleanup and account merge.
-              </p>
-            </div>
+            <ThemeToggle className="shrink-0" />
           </div>
 
           <div className="flex items-center gap-2 rounded-lg border border-primary/15 bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
