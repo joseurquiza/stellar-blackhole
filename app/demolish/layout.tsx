@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import { Header } from "@/components/header"
 import { demolishFaq } from "@/components/demolish/demolish-faq"
 
 const PAGE_URL = "https://www.action-tokens.com/demolish"
@@ -107,9 +106,6 @@ export default function DemolishLayout({ children }: { children: React.ReactNode
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-      <div className="bg-black">
-        <Header />
-      </div>
       {children}
     </>
   )
