@@ -900,27 +900,27 @@ export function DemoModeSimulation() {
   };
 
   return (
-    <div className="dark bg-[#0a0b0f] text-gray-200 rounded-2xl border border-gray-800 px-4 py-8 md:px-8 flex flex-col justify-between overflow-hidden" id="app_root_layout">
+    <div className="bg-muted/40 text-foreground rounded-2xl border border-border px-4 py-8 md:px-8 flex flex-col justify-between overflow-hidden" id="app_root_layout">
       {/* --- Top Navigation Header --- */}
-      <header className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-gray-800 pb-5 mb-8 gap-4" id="tool_header">
+      <header className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-border pb-5 mb-8 gap-4" id="tool_header">
         <div className="flex items-center gap-3">
           <div className="p-2.5 bg-red-500/10 border border-red-500/40 rounded-xl animate-pulse text-red-500">
             <Skull className="h-7 w-7" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-xl md:text-2xl font-bold font-sans tracking-tight text-white mb-0.5">STELLAR DEMOLITION KIT</h1>
+              <h1 className="text-xl md:text-2xl font-bold font-sans tracking-tight text-foreground mb-0.5">STELLAR DEMOLITION KIT</h1>
               <span className="font-mono text-[9px] bg-red-950 text-red-400 border border-red-900 px-1.5 py-0.5 rounded uppercase">Mainnet v1.4</span>
             </div>
-            <p className="text-xs text-gray-400 font-sans">Strategic wallet demolition, asset liquidation, and compliance merging toolkit</p>
+            <p className="text-xs text-muted-foreground font-sans">Strategic wallet demolition, asset liquidation, and compliance merging toolkit</p>
           </div>
         </div>
 
         {/* Real Horizon Connection toggle or Demo mode selection */}
-        <div className="flex flex-wrap items-center gap-2 bg-gray-900 border border-gray-800 p-1 rounded-xl">
+        <div className="flex flex-wrap items-center gap-2 bg-muted border border-border p-1 rounded-xl">
           <button 
             onClick={() => setExplorerMode("sandbox")}
-            className={`flex items-center gap-1 text-xs px-3 py-1.5 rounded-lg transition-all ${explorerMode === "sandbox" ? "bg-amber-500 text-black font-semibold shadow" : "text-gray-400 hover:text-white"}`}
+            className={`flex items-center gap-1 text-xs px-3 py-1.5 rounded-lg transition-all ${explorerMode === "sandbox" ? "bg-amber-500 text-black font-semibold shadow" : "text-muted-foreground hover:text-foreground"}`}
             id="sandbox_mode_btn"
           >
             <Activity className="h-3.5 w-3.5" />
@@ -928,7 +928,7 @@ export function DemoModeSimulation() {
           </button>
           <button 
             onClick={() => setExplorerMode("live")}
-            className={`flex items-center gap-1 text-xs px-3 py-1.5 rounded-lg transition-all ${explorerMode === "live" ? "bg-cyan-500 text-black font-semibold shadow" : "text-gray-400 hover:text-white"}`}
+            className={`flex items-center gap-1 text-xs px-3 py-1.5 rounded-lg transition-all ${explorerMode === "live" ? "bg-cyan-500 text-black font-semibold shadow" : "text-muted-foreground hover:text-foreground"}`}
             id="live_horizon_mode_btn"
           >
             <Search className="h-3.5 w-3.5" />
@@ -939,18 +939,18 @@ export function DemoModeSimulation() {
 
       {/* --- Help Section Info Widget --- */}
       <section className="bg-gradient-to-r from-amber-500/10 to-red-500/10 border border-amber-500/20 rounded-2xl p-4 md:p-5 mb-8 flex flex-col md:flex-row items-start gap-4">
-        <div className="p-2 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-400 mt-1">
+        <div className="p-2 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-600 mt-1">
           <Info className="h-5 w-5" />
         </div>
         <div className="flex-1 space-y-1">
-          <h4 className="text-sm font-semibold text-amber-200">Non-Custodial Multi-Scenario Demolition Warning</h4>
-          <p className="text-xs text-gray-400 leading-relaxed">
+          <h4 className="text-sm font-semibold text-amber-600">Non-Custodial Multi-Scenario Demolition Warning</h4>
+          <p className="text-xs text-muted-foreground leading-relaxed">
             Stellar accounts require specific reserves of XLM for every active trustline, open offer, signer, and data entry. Under Stellar Core protocols, merging or deleting an account is strictly locked unless these positions are fully cleared first. Use the <b>Simulation Sandbox Scenarios</b> to evaluate how the demolition system safely cancels DEX offers, withdraws AMM liquidity, claims locked Soroban DeFi positions, routes liquidations, and bypasses the <b>Exchange Transfer Problem</b>.
           </p>
         </div>
         <button 
           onClick={() => setShowHelperModal(true)} 
-          className="text-xs text-amber-300 hover:text-amber-200 underline font-semibold flex items-center gap-1 whitespace-nowrap pt-1"
+          className="text-xs text-amber-600 hover:text-amber-600 underline font-semibold flex items-center gap-1 whitespace-nowrap pt-1"
           id="how_it_works_btn"
         >
           <BookOpen className="h-3.5 w-3.5" /> Code Checklist
@@ -964,8 +964,8 @@ export function DemoModeSimulation() {
         <section className="col-span-1 lg:col-span-12 xl:col-span-5 space-y-8 flex flex-col justify-start">
           
           {/* --- Mode Panel Controller --- */}
-          <div className="bg-[#12141a]/95 border border-gray-800 p-5 rounded-2xl relative overflow-hidden shadow-xl" id="inspect_panel">
-            <h3 className="text-sm font-semibold font-sans uppercase tracking-wider text-gray-300 mb-4 flex items-center gap-2">
+          <div className="bg-card/95 border border-border p-5 rounded-2xl relative overflow-hidden shadow-xl" id="inspect_panel">
+            <h3 className="text-sm font-semibold font-sans uppercase tracking-wider text-muted-foreground mb-4 flex items-center gap-2">
               <span className="w-1.5 h-3 bg-red-500 rounded-sm"></span>
               Account Discovery & Inspector
             </h3>
@@ -973,37 +973,37 @@ export function DemoModeSimulation() {
             {/* Sandbox Mode Profiles */}
             {explorerMode === "sandbox" ? (
               <div className="space-y-4" id="sandbox_controllers">
-                <div className="label text-xs text-gray-400 font-sans block mb-1">Select simulated active Stellar Account scenarios:</div>
+                <div className="label text-xs text-muted-foreground font-sans block mb-1">Select simulated active Stellar Account scenarios:</div>
                 <div className="grid grid-cols-2 gap-2">
                   <button 
                     onClick={() => selectScenario("trader")}
-                    className={`flex flex-col text-left p-3 rounded-lg border text-xs transition ${selectedScenarioKey === "trader" ? "bg-amber-500/10 border-amber-500 text-amber-300" : "bg-gray-900 border-gray-800 text-gray-400 hover:bg-gray-850 hover:border-gray-750"}`}
+                    className={`flex flex-col text-left p-3 rounded-lg border text-xs transition ${selectedScenarioKey === "trader" ? "bg-amber-500/10 border-amber-500 text-amber-600" : "bg-muted border-border text-muted-foreground hover:bg-secondary hover:border-border"}`}
                   >
-                    <span className="font-semibold text-white mb-0.5">Classic DEX Trader</span>
-                    <span className="text-[10px] text-gray-400">DEX, AMM, claims, data</span>
+                    <span className="font-semibold text-foreground mb-0.5">Classic DEX Trader</span>
+                    <span className="text-[10px] text-muted-foreground">DEX, AMM, claims, data</span>
                   </button>
 
                   <button 
                     onClick={() => selectScenario("soroban")}
-                    className={`flex flex-col text-left p-3 rounded-lg border text-xs transition ${selectedScenarioKey === "soroban" ? "bg-amber-500/10 border-amber-500 text-amber-300" : "bg-gray-900 border-gray-800 text-gray-400 hover:bg-gray-850 hover:border-gray-750"}`}
+                    className={`flex flex-col text-left p-3 rounded-lg border text-xs transition ${selectedScenarioKey === "soroban" ? "bg-amber-500/10 border-amber-500 text-amber-600" : "bg-muted border-border text-muted-foreground hover:bg-secondary hover:border-border"}`}
                   >
-                    <span className="font-semibold text-white mb-0.5">Soroban DeFi Whale</span>
-                    <span className="text-[10px] text-gray-400">Blend, Soroswap, allowances</span>
+                    <span className="font-semibold text-foreground mb-0.5">Soroban DeFi Whale</span>
+                    <span className="text-[10px] text-muted-foreground">Blend, Soroswap, allowances</span>
                   </button>
 
                   <button 
                     onClick={() => selectScenario("multisig")}
-                    className={`flex flex-col text-left p-3 rounded-lg border text-xs transition ${selectedScenarioKey === "multisig" ? "bg-amber-500/10 border-amber-500 text-amber-300" : "bg-gray-900 border-gray-800 text-gray-400 hover:bg-gray-850 hover:border-gray-750"}`}
+                    className={`flex flex-col text-left p-3 rounded-lg border text-xs transition ${selectedScenarioKey === "multisig" ? "bg-amber-500/10 border-amber-500 text-amber-600" : "bg-muted border-border text-muted-foreground hover:bg-secondary hover:border-border"}`}
                   >
-                    <span className="font-semibold text-white mb-0.5">Strict Multisig Wallet</span>
-                    <span className="text-[10px] text-gray-400">Threshold, multiple signers</span>
+                    <span className="font-semibold text-foreground mb-0.5">Strict Multisig Wallet</span>
+                    <span className="text-[10px] text-muted-foreground">Threshold, multiple signers</span>
                   </button>
 
                   <button 
                     onClick={() => selectScenario("sponsoring")}
-                    className={`flex flex-col text-left p-3 rounded-lg border text-xs transition ${selectedScenarioKey === "sponsoring" ? "bg-amber-500/10 border-amber-500 text-amber-300" : "bg-gray-900 border-gray-800 text-gray-400 hover:bg-gray-850 hover:border-gray-750"}`}
+                    className={`flex flex-col text-left p-3 rounded-lg border text-xs transition ${selectedScenarioKey === "sponsoring" ? "bg-amber-500/10 border-amber-500 text-amber-600" : "bg-muted border-border text-muted-foreground hover:bg-secondary hover:border-border"}`}
                   >
-                    <span className="font-semibold text-white mb-0.5">Sponsoring Account</span>
+                    <span className="font-semibold text-foreground mb-0.5">Sponsoring Account</span>
                     <span className="text-[10px] text-red-400">Sponsors reserves (Blocked)</span>
                   </button>
                 </div>
@@ -1013,17 +1013,17 @@ export function DemoModeSimulation() {
               <div className="space-y-4" id="live_controllers">
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <label className="text-xs text-gray-400">Stellar Horizon Endpoint</label>
+                    <label className="text-xs text-muted-foreground">Stellar Horizon Endpoint</label>
                     <div className="flex gap-2">
                       <button 
                         onClick={() => setLiveNetwork("testnet")}
-                        className={`text-[10px] uppercase font-semibold px-2 py-0.5 rounded ${liveNetwork === "testnet" ? "bg-cyan-500/15 text-cyan-400 border border-cyan-500/30" : "text-gray-500"}`}
+                        className={`text-[10px] uppercase font-semibold px-2 py-0.5 rounded ${liveNetwork === "testnet" ? "bg-cyan-500/15 text-cyan-400 border border-cyan-500/30" : "text-muted-foreground"}`}
                       >
                         Testnet
                       </button>
                       <button 
                         onClick={() => setLiveNetwork("mainnet")}
-                        className={`text-[10px] uppercase font-semibold px-2 py-0.5 rounded ${liveNetwork === "mainnet" ? "bg-amber-500/15 text-amber-400 border border-amber-500/30" : "text-gray-500"}`}
+                        className={`text-[10px] uppercase font-semibold px-2 py-0.5 rounded ${liveNetwork === "mainnet" ? "bg-amber-500/15 text-amber-600 border border-amber-500/30" : "text-muted-foreground"}`}
                       >
                         Mainnet
                       </button>
@@ -1037,7 +1037,7 @@ export function DemoModeSimulation() {
                         placeholder="GDEX... or GA5..."
                         value={liveAddressInput}
                         onChange={(e) => setLiveAddressInput(e.target.value)}
-                        className="w-full text-xs font-mono bg-gray-950 border border-gray-800 rounded-lg px-3 py-2.5 text-white placeholder-gray-600 focus:outline-none focus:border-cyan-500 h-10"
+                        className="w-full text-xs font-mono bg-card border border-border rounded-lg px-3 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-cyan-500 h-10"
                         id="live_address_input_field"
                       />
                     </div>
@@ -1057,36 +1057,36 @@ export function DemoModeSimulation() {
                       <span>{liveError}</span>
                     </div>
                   )}
-                  <p className="text-[10px] text-gray-500 text-center italic">Type any public key to view its live trustlines, signers, thresholds, and data.</p>
+                  <p className="text-[10px] text-muted-foreground text-center italic">Type any public key to view its live trustlines, signers, thresholds, and data.</p>
                 </div>
               </div>
             )}
 
             {/* Account Card Detail Block */}
-            <div className="mt-5 pt-4 border-t border-gray-800 font-mono text-xs text-gray-400 space-y-2">
-              <div className="flex justify-between items-center bg-gray-950 p-2.5 rounded-lg border border-gray-900">
-                <span className="text-[10px] uppercase text-gray-500 font-bold">Account ID</span>
-                <span className="text-white text-[11px] truncate w-48 text-right font-semibold select-all" title={account.accountId}>
+            <div className="mt-5 pt-4 border-t border-border font-mono text-xs text-muted-foreground space-y-2">
+              <div className="flex justify-between items-center bg-card p-2.5 rounded-lg border border-border">
+                <span className="text-[10px] uppercase text-muted-foreground font-bold">Account ID</span>
+                <span className="text-foreground text-[11px] truncate w-48 text-right font-semibold select-all" title={account.accountId}>
                   {account.accountId.substring(0, 10)}...{account.accountId.substring(account.accountId.length - 8)}
                 </span>
               </div>
               <div className="grid grid-cols-2 gap-3 mt-2">
-                <div className="bg-gray-950 p-2.5 rounded-lg border border-gray-900 flex flex-col justify-between">
-                  <span className="text-[10px] uppercase text-gray-500 font-bold mb-1">CORE XLM BALANCE</span>
-                  <span className="text-white text-base font-bold">{account.xlmBalance.toFixed(2)} <span className="text-xs font-normal text-gray-500">XLM</span></span>
+                <div className="bg-card p-2.5 rounded-lg border border-border flex flex-col justify-between">
+                  <span className="text-[10px] uppercase text-muted-foreground font-bold mb-1">CORE XLM BALANCE</span>
+                  <span className="text-foreground text-base font-bold">{account.xlmBalance.toFixed(2)} <span className="text-xs font-normal text-muted-foreground">XLM</span></span>
                 </div>
-                <div className="bg-gray-950 p-2.5 rounded-lg border border-gray-900 flex flex-col justify-between">
-                  <span className="text-[10px] uppercase text-gray-500 font-bold mb-1">MANDATORY RESERVE</span>
-                  <span className="text-white text-base font-bold text-amber-500">{account.baseReserves.toFixed(2)} <span className="text-xs font-normal text-gray-500">XLM</span></span>
+                <div className="bg-card p-2.5 rounded-lg border border-border flex flex-col justify-between">
+                  <span className="text-[10px] uppercase text-muted-foreground font-bold mb-1">MANDATORY RESERVE</span>
+                  <span className="text-foreground text-base font-bold text-amber-600">{account.baseReserves.toFixed(2)} <span className="text-xs font-normal text-muted-foreground">XLM</span></span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* --- Safety & Audit Mitigation Analysis (Phase 2) --- */}
-          <div className="bg-[#12141a]/95 border border-gray-800 p-5 rounded-2xl" id="safety_analysis_module">
+          <div className="bg-card/95 border border-border p-5 rounded-2xl" id="safety_analysis_module">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-semibold font-sans uppercase tracking-wider text-gray-200 flex items-center gap-2">
+              <h3 className="text-sm font-semibold font-sans uppercase tracking-wider text-foreground flex items-center gap-2">
                 <span className={`w-1.5 h-3 rounded-sm ${safetyCheck.canDemolish ? "bg-green-500" : "bg-red-500"}`}></span>
                 Phase 2: Security & Safety Analysis
               </h3>
@@ -1102,17 +1102,17 @@ export function DemoModeSimulation() {
                   <ShieldAlert className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
                   <div>
                     <h4 className="text-xs font-bold text-red-200 uppercase tracking-wide">Merge Blocker Error</h4>
-                    <p className="text-xs text-gray-400 mt-1 leading-relaxed">{bl}</p>
+                    <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{bl}</p>
                   </div>
                 </div>
               ))}
 
               {safetyCheck.warnings.map((wa, wIdx) => (
                 <div key={wIdx} className="p-3 bg-amber-500/5 border border-amber-500/20 rounded-xl flex items-start gap-3">
-                  <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />
+                  <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
                   <div>
-                    <h4 className="text-xs font-bold text-amber-300 uppercase tracking-wide">Ledger Warning Alert</h4>
-                    <p className="text-xs text-gray-400 mt-0.5 leading-relaxed">{wa}</p>
+                    <h4 className="text-xs font-bold text-amber-600 uppercase tracking-wide">Ledger Warning Alert</h4>
+                    <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{wa}</p>
                   </div>
                 </div>
               ))}
@@ -1122,21 +1122,21 @@ export function DemoModeSimulation() {
                   <CheckCircle2 className="h-5 w-5 text-green-400 shrink-0" />
                   <div>
                     <h4 className="text-xs font-bold text-green-300 uppercase tracking-wide">Account Clean for Merge</h4>
-                    <p className="text-xs text-gray-400 mt-1">No outstanding trustlines, data elements, AMMs, DEX offers, or smart-contracts found. The entire balance will be recovered.</p>
+                    <p className="text-xs text-muted-foreground mt-1">No outstanding trustlines, data elements, AMMs, DEX offers, or smart-contracts found. The entire balance will be recovered.</p>
                   </div>
                 </div>
               )}
             </div>
 
             {/* AI Security Opinion Button */}
-            <div className="mt-4 pt-3 border-t border-gray-800">
+            <div className="mt-4 pt-3 border-t border-border">
               <button 
                 onClick={generateAISecurityAudit}
                 disabled={isGeneratingAudit}
-                className="w-full bg-gray-900 hover:bg-gray-800 border border-gray-700 text-white rounded-xl py-2.5 text-xs font-sans font-semibold flex items-center justify-center gap-2 transition disabled:opacity-50"
+                className="w-full bg-muted hover:bg-secondary border border-border text-foreground rounded-xl py-2.5 text-xs font-sans font-semibold flex items-center justify-center gap-2 transition disabled:opacity-50"
                 id="ai_audit_btn"
               >
-                <Sparkles className="h-4 w-4 text-amber-500 animate-pulse" />
+                <Sparkles className="h-4 w-4 text-amber-600 animate-pulse" />
                 {isGeneratingAudit ? "Consulting AI Security Agent..." : "Generate AI Safety Opinion"}
               </button>
             </div>
@@ -1148,18 +1148,18 @@ export function DemoModeSimulation() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
-                  className="mt-4 p-4 bg-gray-950 border border-amber-500/20 rounded-xl max-h-60 overflow-y-auto"
+                  className="mt-4 p-4 bg-card border border-amber-500/20 rounded-xl max-h-60 overflow-y-auto"
                   id="ai_audit_report_view"
                 >
-                  <div className="flex items-center justify-between border-b border-gray-800 pb-2 mb-2">
-                    <h4 className="text-xs font-sans font-bold text-amber-400 flex items-center gap-1.5 uppercase">
+                  <div className="flex items-center justify-between border-b border-border pb-2 mb-2">
+                    <h4 className="text-xs font-sans font-bold text-amber-600 flex items-center gap-1.5 uppercase">
                       <Sparkles className="h-3.5 w-3.5" /> Gemini Security Audit
                     </h4>
-                    <button onClick={() => setAiAuditReport(null)} className="text-gray-500 hover:text-gray-300">
+                    <button onClick={() => setAiAuditReport(null)} className="text-muted-foreground hover:text-muted-foreground">
                       <X className="h-3 w-3" />
                     </button>
                   </div>
-                  <div className="prose prose-invert prose-xs text-gray-300 font-sans text-xs space-y-2 whitespace-pre-line leading-relaxed">
+                  <div className="prose prose-invert prose-xs text-muted-foreground font-sans text-xs space-y-2 whitespace-pre-line leading-relaxed">
                     {aiAuditReport}
                   </div>
                 </motion.div>
@@ -1169,24 +1169,24 @@ export function DemoModeSimulation() {
 
           {/* --- Interactive Signers Configuration / Signature Collector --- */}
           {safetyCheck.hasMultisig && (
-            <div className="bg-[#12141a]/95 border border-gray-800 p-5 rounded-2xl space-y-4" id="multisig_signer_collector">
+            <div className="bg-card/95 border border-border p-5 rounded-2xl space-y-4" id="multisig_signer_collector">
               <div>
-                <h3 className="text-sm font-semibold font-sans uppercase tracking-wider text-gray-200 mb-1 flex items-center gap-2">
+                <h3 className="text-sm font-semibold font-sans uppercase tracking-wider text-foreground mb-1 flex items-center gap-2">
                   <Users className="h-4 w-4 text-cyan-400" />
                   Multisig Signature Gathering
                 </h3>
-                <p className="text-[11px] text-gray-400">Account has high thresholds and signers. Merging balances requires signatures weightsum ≥ {safetyCheck.thresholdNeeded}.</p>
+                <p className="text-[11px] text-muted-foreground">Account has high thresholds and signers. Merging balances requires signatures weightsum ≥ {safetyCheck.thresholdNeeded}.</p>
               </div>
 
               {/* Threshold indicator bar */}
               <div className="space-y-1.5">
                 <div className="flex justify-between font-mono text-[11px]">
-                  <span className="text-gray-400">Signature Weight gathered:</span>
-                  <span className={`font-bold ${safetyCheck.totalSignaturesWeight >= safetyCheck.thresholdNeeded ? "text-green-400" : "text-amber-500"}`}>
+                  <span className="text-muted-foreground">Signature Weight gathered:</span>
+                  <span className={`font-bold ${safetyCheck.totalSignaturesWeight >= safetyCheck.thresholdNeeded ? "text-green-400" : "text-amber-600"}`}>
                     {safetyCheck.totalSignaturesWeight} / {safetyCheck.thresholdNeeded} Weight
                   </span>
                 </div>
-                <div className="w-full bg-gray-900 rounded-full h-3 overflow-hidden border border-gray-800 flex">
+                <div className="w-full bg-muted rounded-full h-3 overflow-hidden border border-border flex">
                   {account.signers.map((s, idx) => {
                     const isSigned = s.key === account.accountId || cosignedKeys.includes(s.key);
                     const weightPct = (s.weight / Math.max(safetyCheck.thresholdNeeded, account.signers.length)) * 100;
@@ -1194,7 +1194,7 @@ export function DemoModeSimulation() {
                       <div 
                         key={idx} 
                         style={{ width: `${weightPct}%` }}
-                        className={`h-full border-r border-gray-950 last:border-0 transition-all ${isSigned ? "bg-green-500" : "bg-gray-800"}`}
+                        className={`h-full border-r border-border last:border-0 transition-all ${isSigned ? "bg-green-500" : "bg-secondary"}`}
                         title={`${s.key.substring(0, 10)}... (weight: ${s.weight}) ${isSigned ? "[Gathered]" : "[Pending]"}`}
                       />
                     );
@@ -1203,18 +1203,18 @@ export function DemoModeSimulation() {
               </div>
 
               {/* Quick signer simulator clickable bubbles */}
-              <div className="space-y-2 bg-gray-950 p-3 rounded-lg border border-gray-900">
-                <div className="text-[10px] uppercase text-gray-500 font-bold font-sans">Required Signers List</div>
+              <div className="space-y-2 bg-card p-3 rounded-lg border border-border">
+                <div className="text-[10px] uppercase text-muted-foreground font-bold font-sans">Required Signers List</div>
                 {account.signers.map((s, sIdx) => {
                   const isPowerSigner = s.key === account.accountId;
                   const isGathered = isPowerSigner || cosignedKeys.includes(s.key);
                   return (
                     <div key={sIdx} className="flex justify-between items-center text-xs font-mono">
-                      <span className="truncate w-40 text-gray-400" title={s.key}>
+                      <span className="truncate w-40 text-muted-foreground" title={s.key}>
                         {isPowerSigner ? "⭐⭐ OWN KEY: " : "🔑 CO-KEY: "}{s.key.substring(0, 12)}...
                       </span>
                       <div className="flex items-center gap-1.5">
-                        <span className="text-gray-500 font-bold bg-gray-900 px-1.5 py-0.5 rounded text-[10px]">W: {s.weight}</span>
+                        <span className="text-muted-foreground font-bold bg-muted px-1.5 py-0.5 rounded text-[10px]">W: {s.weight}</span>
                         {!isPowerSigner && (
                           <button 
                             onClick={() => {
@@ -1224,7 +1224,7 @@ export function DemoModeSimulation() {
                                 setCosignedKeys(prev => [...prev, s.key]);
                               }
                             }}
-                            className={`text-[10px] font-sans px-2 py-0.5 rounded transition font-bold ${isGathered ? "bg-green-500/20 text-green-400 border border-green-500/40" : "bg-gray-900 text-gray-400 border border-gray-800 hover:text-white"}`}
+                            className={`text-[10px] font-sans px-2 py-0.5 rounded transition font-bold ${isGathered ? "bg-green-500/20 text-green-400 border border-green-500/40" : "bg-muted text-muted-foreground border border-border hover:text-foreground"}`}
                           >
                             {isGathered ? "Unsign" : "Simulate Sign"}
                           </button>
@@ -1243,21 +1243,21 @@ export function DemoModeSimulation() {
         <section className="col-span-1 lg:col-span-12 xl:col-span-7 space-y-8">
           
           {/* --- Interactive ledger tabs (Phase 1 Deep Dive & Action triggers) --- */}
-          <div className="bg-[#12141a]/95 border border-gray-800 rounded-3xl overflow-hidden shadow-xl" id="asset_ledger_viewer">
+          <div className="bg-card/95 border border-border rounded-3xl overflow-hidden shadow-xl" id="asset_ledger_viewer">
             
             {/* Header Tabs Navigation */}
-            <div className="bg-gray-900/60 p-2 border-b border-gray-800 flex justify-between items-center flex-wrap gap-2">
+            <div className="bg-muted/60 p-2 border-b border-border flex justify-between items-center flex-wrap gap-2">
               <div className="flex gap-1">
                 <button 
                   onClick={() => setActiveTab("balances")}
-                  className={`text-xs px-3 py-2 rounded-xl transition ${activeTab === "balances" ? "bg-amber-500 text-black font-semibold" : "text-gray-400 hover:text-white hover:bg-gray-800"}`}
+                  className={`text-xs px-3 py-2 rounded-xl transition ${activeTab === "balances" ? "bg-amber-500 text-black font-semibold" : "text-muted-foreground hover:text-foreground hover:bg-secondary"}`}
                   id="tab_balances"
                 >
                   Balances ({account.trustlines.length})
                 </button>
                 <button 
                   onClick={() => setActiveTab("defi")}
-                  className={`text-xs px-3 py-2 rounded-xl relative transition ${activeTab === "defi" ? "bg-amber-500 text-black font-semibold" : "text-gray-400 hover:text-white hover:bg-gray-800"}`}
+                  className={`text-xs px-3 py-2 rounded-xl relative transition ${activeTab === "defi" ? "bg-amber-500 text-black font-semibold" : "text-muted-foreground hover:text-foreground hover:bg-secondary"}`}
                   id="tab_defi"
                 >
                   DeFi Stake ({account.ammPositions.length + account.sorobanPositions.length})
@@ -1267,14 +1267,14 @@ export function DemoModeSimulation() {
                 </button>
                 <button 
                   onClick={() => setActiveTab("claims")}
-                  className={`text-xs px-3 py-2 rounded-xl transition ${activeTab === "claims" ? "bg-amber-500 text-black font-semibold" : "text-gray-400 hover:text-white hover:bg-gray-800"}`}
+                  className={`text-xs px-3 py-2 rounded-xl transition ${activeTab === "claims" ? "bg-amber-500 text-black font-semibold" : "text-muted-foreground hover:text-foreground hover:bg-secondary"}`}
                   id="tab_claims"
                 >
                   Claimables ({account.claimableBalances.length})
                 </button>
                 <button 
                   onClick={() => setActiveTab("access")}
-                  className={`text-xs px-3 py-2 rounded-xl transition ${activeTab === "access" ? "bg-amber-500 text-black font-semibold" : "text-gray-400 hover:text-white hover:bg-gray-800"}`}
+                  className={`text-xs px-3 py-2 rounded-xl transition ${activeTab === "access" ? "bg-amber-500 text-black font-semibold" : "text-muted-foreground hover:text-foreground hover:bg-secondary"}`}
                   id="tab_access"
                 >
                   Ledger Info ({account.dataEntries.length + account.signers.length})
@@ -1282,7 +1282,7 @@ export function DemoModeSimulation() {
               </div>
 
               {explorerMode === "sandbox" && (
-                <div className="text-[10px] text-gray-400 bg-[#0c0e12] border border-gray-800 px-2.5 py-1 rounded-lg">
+                <div className="text-[10px] text-muted-foreground bg-card border border-border px-2.5 py-1 rounded-lg">
                   💡 Sandbox: Simulates step-by-step liquidation
                 </div>
               )}
@@ -1293,11 +1293,11 @@ export function DemoModeSimulation() {
               {activeTab === "balances" && (
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <h4 className="text-xs font-semibold uppercase text-gray-400 tracking-wide font-mono">Stellar & Soroban Asset Trustlines</h4>
+                    <h4 className="text-xs font-semibold uppercase text-muted-foreground tracking-wide font-mono">Stellar & Soroban Asset Trustlines</h4>
                     {explorerMode === "sandbox" && account.trustlines.some(t => parseFloat(t.balance) > 0) && (
                       <button 
                         onClick={simulateTokenLiquidation}
-                        className="text-xs bg-amber-500/15 border border-amber-500/30 hover:bg-amber-500/30 text-amber-300 font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition"
+                        className="text-xs bg-amber-500/15 border border-amber-500/30 hover:bg-amber-500/30 text-amber-600 font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition"
                         id="liquidate_trustlines_btn"
                       >
                         <Coins className="h-3.5 w-3.5" />
@@ -1308,49 +1308,49 @@ export function DemoModeSimulation() {
 
                   <div className="space-y-2">
                     {/* Hardcoded XLM Base balance shown on top */}
-                    <div className="bg-[#0b0c0e]/80 border border-gray-800/60 p-4 rounded-xl flex items-center justify-between">
+                    <div className="bg-card/80 border border-border/60 p-4 rounded-xl flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="bg-amber-500/10 p-2.5 rounded-xl border border-amber-500/20 text-amber-500 text-xs font-bold leading-none">XLM</div>
+                        <div className="bg-amber-500/10 p-2.5 rounded-xl border border-amber-500/20 text-amber-600 text-xs font-bold leading-none">XLM</div>
                         <div>
-                          <div className="text-xs font-semibold text-white">Stellar Lumens (Native)</div>
-                          <div className="text-[10px] font-mono text-gray-500 mt-0.5">Asset ID: CLASSIC_NATIVE</div>
+                          <div className="text-xs font-semibold text-foreground">Stellar Lumens (Native)</div>
+                          <div className="text-[10px] font-mono text-muted-foreground mt-0.5">Asset ID: CLASSIC_NATIVE</div>
                         </div>
                       </div>
                       <div className="text-right font-mono">
-                        <div className="text-sm font-bold text-white">{account.xlmBalance.toFixed(2)} XLM</div>
-                        <div className="text-[10px] text-gray-500">Unrestricted balance</div>
+                        <div className="text-sm font-bold text-foreground">{account.xlmBalance.toFixed(2)} XLM</div>
+                        <div className="text-[10px] text-muted-foreground">Unrestricted balance</div>
                       </div>
                     </div>
 
                     {account.trustlines.length === 0 ? (
-                      <div className="bg-[#0b0c0e]/30 border border-dashed border-gray-800 text-center py-8 rounded-xl">
-                        <Coins className="h-6 w-6 text-gray-600 mx-auto mb-2" />
-                        <p className="text-xs text-gray-500">No token trustlines detected on this account.</p>
+                      <div className="bg-card/30 border border-dashed border-border text-center py-8 rounded-xl">
+                        <Coins className="h-6 w-6 text-muted-foreground mx-auto mb-2" />
+                        <p className="text-xs text-muted-foreground">No token trustlines detected on this account.</p>
                       </div>
                     ) : (
                       account.trustlines.map((t, idx) => (
-                        <div key={idx} className="bg-[#0b0c0e]/80 border border-gray-800 p-4 rounded-xl flex items-center justify-between">
+                        <div key={idx} className="bg-card/80 border border-border p-4 rounded-xl flex items-center justify-between">
                           <div className="flex items-center gap-3">
-                            <div className="bg-gray-800/80 p-2.5 rounded-xl text-xs font-bold font-mono text-white leading-none">
+                            <div className="bg-secondary/80 p-2.5 rounded-xl text-xs font-bold font-mono text-foreground leading-none">
                               {t.assetCode}
                             </div>
                             <div>
-                              <div className="text-xs font-semibold text-white flex items-center gap-1.5">
+                              <div className="text-xs font-semibold text-foreground flex items-center gap-1.5">
                                 {t.assetCode} Trustline
                                 {t.isSoroban && (
                                   <span className="text-[9px] bg-purple-950/40 text-purple-400 border border-purple-900 px-1.5 py-0.1 rounded uppercase font-mono">Soroban SAC</span>
                                 )}
                               </div>
-                              <div className="text-[10px] font-mono text-gray-500 max-w-[200px] md:max-w-xs truncate" title={t.assetIssuer}>
+                              <div className="text-[10px] font-mono text-muted-foreground max-w-[200px] md:max-w-xs truncate" title={t.assetIssuer}>
                                 Issuer: {t.assetIssuer.substring(0, 8)}...{t.assetIssuer.substring(t.assetIssuer.length - 8)}
                               </div>
                             </div>
                           </div>
                           <div className="text-right font-mono">
-                            <div className={`text-sm font-bold ${parseFloat(t.balance) > 0 ? "text-white" : "text-gray-500"}`}>
+                            <div className={`text-sm font-bold ${parseFloat(t.balance) > 0 ? "text-foreground" : "text-muted-foreground"}`}>
                               {t.balance} {t.assetCode}
                             </div>
-                            <div className="text-[10px] text-gray-500">Limit: {t.limit || "Unrestricted"}</div>
+                            <div className="text-[10px] text-muted-foreground">Limit: {t.limit || "Unrestricted"}</div>
                           </div>
                         </div>
                       ))
@@ -1365,7 +1365,7 @@ export function DemoModeSimulation() {
                   {/* Classical DEX Offers (Phase 3) */}
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
-                      <h4 className="text-xs font-semibold uppercase text-gray-400 tracking-wide font-mono">Active Stellar DEX Offers</h4>
+                      <h4 className="text-xs font-semibold uppercase text-muted-foreground tracking-wide font-mono">Active Stellar DEX Offers</h4>
                       {explorerMode === "sandbox" && account.dexOffers.length > 0 && (
                         <button 
                           onClick={simulateCancelOffers}
@@ -1379,23 +1379,23 @@ export function DemoModeSimulation() {
                     </div>
 
                     {account.dexOffers.length === 0 ? (
-                      <div className="bg-[#0b0c0e]/30 border border-dashed border-gray-800 text-center py-5 rounded-xl text-xs text-gray-500">
+                      <div className="bg-card/30 border border-dashed border-border text-center py-5 rounded-xl text-xs text-muted-foreground">
                         No active DEX Offers found on this ledger.
                       </div>
                     ) : (
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                         {account.dexOffers.map((o, idx) => (
-                          <div key={idx} className="bg-[#0b0c0e]/80 border border-gray-800 p-3 rounded-xl flex flex-col justify-between">
-                            <div className="flex justify-between items-center border-b border-gray-850 pb-1.5 mb-2">
-                              <span className="font-mono text-[10px] bg-gray-900 text-gray-400 px-1.5 py-0.5 rounded font-bold">OFFER #{o.id}</span>
-                              <span className="text-[9px] uppercase px-1.5 py-0.5 bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold font-mono">DEX</span>
+                          <div key={idx} className="bg-card/80 border border-border p-3 rounded-xl flex flex-col justify-between">
+                            <div className="flex justify-between items-center border-b border-border pb-1.5 mb-2">
+                              <span className="font-mono text-[10px] bg-muted text-muted-foreground px-1.5 py-0.5 rounded font-bold">OFFER #{o.id}</span>
+                              <span className="text-[9px] uppercase px-1.5 py-0.5 bg-amber-500/10 text-amber-600 border border-amber-500/20 font-bold font-mono">DEX</span>
                             </div>
                             <div className="flex items-center justify-between text-xs font-mono">
-                              <span className="text-gray-400">Selling:</span>
-                              <span className="text-white font-semibold">{o.amount} {o.sellingCode}</span>
+                              <span className="text-muted-foreground">Selling:</span>
+                              <span className="text-foreground font-semibold">{o.amount} {o.sellingCode}</span>
                             </div>
                             <div className="flex items-center justify-between text-xs font-mono mt-1">
-                              <span className="text-gray-400">Price Rate:</span>
+                              <span className="text-muted-foreground">Price Rate:</span>
                               <span className="text-cyan-400 font-semibold">{o.price} {o.buyingCode}</span>
                             </div>
                           </div>
@@ -1405,9 +1405,9 @@ export function DemoModeSimulation() {
                   </div>
 
                   {/* AMM Positions & Liquidity pools (Phase 3) */}
-                  <div className="space-y-3 pt-3 border-t border-gray-850">
+                  <div className="space-y-3 pt-3 border-t border-border">
                     <div className="flex justify-between items-center">
-                      <h4 className="text-xs font-semibold uppercase text-gray-400 tracking-wide font-mono">Classic AMM Positions</h4>
+                      <h4 className="text-xs font-semibold uppercase text-muted-foreground tracking-wide font-mono">Classic AMM Positions</h4>
                       {explorerMode === "sandbox" && account.ammPositions.length > 0 && (
                         <button 
                           onClick={simulateWithdrawAMMs}
@@ -1421,24 +1421,24 @@ export function DemoModeSimulation() {
                     </div>
 
                     {account.ammPositions.length === 0 ? (
-                      <div className="bg-[#0b0c0e]/30 border border-dashed border-gray-800 text-center py-5 rounded-xl text-xs text-gray-500">
+                      <div className="bg-card/30 border border-dashed border-border text-center py-5 rounded-xl text-xs text-muted-foreground">
                         No active AMM liquidity pool stakes found on ledger.
                       </div>
                     ) : (
                       account.ammPositions.map((p, idx) => (
-                        <div key={idx} className="bg-[#0b0c0e]/80 border border-gray-800 p-4 rounded-xl flex flex-col md:flex-row justify-between gap-3">
+                        <div key={idx} className="bg-card/80 border border-border p-4 rounded-xl flex flex-col md:flex-row justify-between gap-3">
                           <div className="space-y-1">
                             <div className="flex items-center gap-2">
-                              <span className="text-xs font-bold text-white font-mono">{p.assetA}/{p.assetB} Pool Shares</span>
-                              <span className="text-[10px] font-mono text-gray-500">Pool ID: {p.poolId}</span>
+                              <span className="text-xs font-bold text-foreground font-mono">{p.assetA}/{p.assetB} Pool Shares</span>
+                              <span className="text-[10px] font-mono text-muted-foreground">Pool ID: {p.poolId}</span>
                             </div>
-                            <div className="text-[10px] text-gray-400 font-mono">
-                              Underlying Assets Locked: <span className="text-white">{p.tokenAValue}</span> and <span className="text-white">{p.tokenBValue}</span>
+                            <div className="text-[10px] text-muted-foreground font-mono">
+                              Underlying Assets Locked: <span className="text-foreground">{p.tokenAValue}</span> and <span className="text-foreground">{p.tokenBValue}</span>
                             </div>
                           </div>
                           <div className="text-right flex md:flex-col justify-between items-center md:items-end font-mono">
                             <div className="text-xs text-cyan-400 font-bold">{p.shares} LP Shares</div>
-                            <div className="text-[10px] text-gray-500">Value of LP: ~{p.xlmValue} XLM</div>
+                            <div className="text-[10px] text-muted-foreground">Value of LP: ~{p.xlmValue} XLM</div>
                           </div>
                         </div>
                       ))
@@ -1446,7 +1446,7 @@ export function DemoModeSimulation() {
                   </div>
 
                   {/* Soroban DeFi positions (Phase 3) */}
-                  <div className="space-y-3 pt-3 border-t border-gray-850">
+                  <div className="space-y-3 pt-3 border-t border-border">
                     <div className="flex justify-between items-center">
                       <h4 className="text-xs font-semibold uppercase text-purple-400 tracking-wide font-mono flex items-center gap-1">
                         <Sparkles className="h-3.5 w-3.5" />
@@ -1465,33 +1465,33 @@ export function DemoModeSimulation() {
                     </div>
 
                     {account.sorobanPositions.length === 0 ? (
-                      <div className="bg-[#0b0c0e]/30 border border-dashed border-gray-800 text-center py-5 rounded-xl text-xs text-gray-500">
+                      <div className="bg-card/30 border border-dashed border-border text-center py-5 rounded-xl text-xs text-muted-foreground">
                         No active smart contract lending or platform farms detected.
                       </div>
                     ) : (
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                         {account.sorobanPositions.map((sp, idx) => (
-                          <div key={idx} className="bg-[#0b0c0e]/80 border border-purple-500/10 p-3.5 rounded-xl flex flex-col justify-between">
+                          <div key={idx} className="bg-card/80 border border-purple-500/10 p-3.5 rounded-xl flex flex-col justify-between">
                             <div>
                               <div className="flex justify-between items-center mb-1.5">
                                 <span className="font-bold text-xs text-purple-400">{sp.protocol}</span>
                                 <span className="text-[9px] uppercase px-1.5 py-0.5 bg-purple-500/20 text-purple-300 rounded font-bold font-mono">{sp.type}</span>
                               </div>
-                              <div className="text-xs text-gray-300 font-mono mt-2">
-                                <span className="text-gray-500">Supplied:</span> <span className="text-white font-bold">{sp.supplied} {sp.symbol}</span>
+                              <div className="text-xs text-muted-foreground font-mono mt-2">
+                                <span className="text-muted-foreground">Supplied:</span> <span className="text-foreground font-bold">{sp.supplied} {sp.symbol}</span>
                               </div>
                               {parseFloat(sp.borrowed) > 0 && (
                                 <div className="text-xs text-red-400 font-mono">
-                                  <span className="text-gray-500">Borrowed:</span> <span>{sp.borrowed} {sp.symbol}</span>
+                                  <span className="text-muted-foreground">Borrowed:</span> <span>{sp.borrowed} {sp.symbol}</span>
                                 </div>
                               )}
                               <div className="text-[11px] text-green-400 font-mono mt-1">
-                                <span className="text-gray-500">Yield rewards:</span> <span>+{sp.rewardEarned}</span>
+                                <span className="text-muted-foreground">Yield rewards:</span> <span>+{sp.rewardEarned}</span>
                               </div>
                             </div>
-                            <div className="border-t border-purple-505/20 pt-2 mt-2 flex justify-between items-center text-[10px] font-mono text-gray-500">
+                            <div className="border-t border-purple-505/20 pt-2 mt-2 flex justify-between items-center text-[10px] font-mono text-muted-foreground">
                               <span>Collateral:</span>
-                              <span className={sp.collateralized ? "text-green-400" : "text-gray-400"}>{sp.collateralized ? "ACTIVE" : "NONE"}</span>
+                              <span className={sp.collateralized ? "text-green-400" : "text-muted-foreground"}>{sp.collateralized ? "ACTIVE" : "NONE"}</span>
                             </div>
                           </div>
                         ))}
@@ -1505,11 +1505,11 @@ export function DemoModeSimulation() {
               {activeTab === "claims" && (
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <h4 className="text-xs font-semibold uppercase text-gray-400 tracking-wide font-mono">Pending Claimable Balances</h4>
+                    <h4 className="text-xs font-semibold uppercase text-muted-foreground tracking-wide font-mono">Pending Claimable Balances</h4>
                     {explorerMode === "sandbox" && account.claimableBalances.length > 0 && (
                       <button 
                         onClick={simulateRecoverClaims}
-                        className="text-xs bg-amber-500/15 border border-amber-500/30 hover:bg-amber-500/30 text-amber-300 font-semibold px-2.5 py-1 rounded-lg flex items-center gap-1 transition"
+                        className="text-xs bg-amber-500/15 border border-amber-500/30 hover:bg-amber-500/30 text-amber-600 font-semibold px-2.5 py-1 rounded-lg flex items-center gap-1 transition"
                         id="recover_claims_btn"
                       >
                         <Coins className="h-3.5 w-3.5" />
@@ -1519,19 +1519,19 @@ export function DemoModeSimulation() {
                   </div>
 
                   {account.claimableBalances.length === 0 ? (
-                    <div className="bg-[#0b0c0e]/30 border border-dashed border-gray-800 text-center py-8 rounded-xl text-xs text-gray-500">
+                    <div className="bg-card/30 border border-dashed border-border text-center py-8 rounded-xl text-xs text-muted-foreground">
                       No unclaimed envelopes on ledger for this account ID.
                     </div>
                   ) : (
                     account.claimableBalances.map((cb, idx) => (
-                      <div key={idx} className="bg-[#0b0c0e]/80 border border-gray-800 p-4 rounded-xl flex items-center justify-between">
+                      <div key={idx} className="bg-card/80 border border-border p-4 rounded-xl flex items-center justify-between">
                         <div className="space-y-1">
-                          <div className="text-xs font-bold font-mono text-white">Pending Sweep: {cb.amount} {cb.assetCode}</div>
-                          <div className="text-[10px] font-mono text-gray-500 max-w-sm truncate">ID: {cb.id}</div>
+                          <div className="text-xs font-bold font-mono text-foreground">Pending Sweep: {cb.amount} {cb.assetCode}</div>
+                          <div className="text-[10px] font-mono text-muted-foreground max-w-sm truncate">ID: {cb.id}</div>
                         </div>
-                        <div className="text-right font-mono text-[10px] text-gray-500">
+                        <div className="text-right font-mono text-[10px] text-muted-foreground">
                           <span>Sponsor Address:</span>
-                          <div className="text-white font-semibold transition">{cb.sponsor}</div>
+                          <div className="text-foreground font-semibold transition">{cb.sponsor}</div>
                         </div>
                       </div>
                     ))
@@ -1544,17 +1544,17 @@ export function DemoModeSimulation() {
                 <div className="space-y-5">
                   {/* Data entries */}
                   <div className="space-y-3">
-                    <h4 className="text-xs font-semibold uppercase text-gray-400 tracking-wide font-mono">Storage Ledger Data Entries</h4>
+                    <h4 className="text-xs font-semibold uppercase text-muted-foreground tracking-wide font-mono">Storage Ledger Data Entries</h4>
                     {account.dataEntries.length === 0 ? (
-                      <div className="bg-[#0b0c0e]/30 border border-dashed border-gray-800 text-center py-5 rounded-xl text-xs text-gray-500">
+                      <div className="bg-card/30 border border-dashed border-border text-center py-5 rounded-xl text-xs text-muted-foreground">
                         No custom string data entries found on the ledger.
                       </div>
                     ) : (
                       <div className="space-y-2">
                         {account.dataEntries.map((d, dIdx) => (
-                          <div key={dIdx} className="bg-[#0b0c0e]/80 border border-gray-800 p-3 rounded-lg flex justify-between items-center font-mono text-xs">
-                            <span className="text-gray-400">{d.key}</span>
-                            <span className="text-cyan-400 font-bold select-all bg-gray-950 px-2 py-0.5 rounded">{d.value}</span>
+                          <div key={dIdx} className="bg-card/80 border border-border p-3 rounded-lg flex justify-between items-center font-mono text-xs">
+                            <span className="text-muted-foreground">{d.key}</span>
+                            <span className="text-cyan-400 font-bold select-all bg-card px-2 py-0.5 rounded">{d.value}</span>
                           </div>
                         ))}
                       </div>
@@ -1562,19 +1562,19 @@ export function DemoModeSimulation() {
                   </div>
 
                   {/* Allowances/Approvals */}
-                  <div className="space-y-3 pt-3 border-t border-gray-850">
-                    <h4 className="text-xs font-semibold uppercase text-gray-400 tracking-wide font-mono">Smart Token Clearances & Approvals</h4>
+                  <div className="space-y-3 pt-3 border-t border-border">
+                    <h4 className="text-xs font-semibold uppercase text-muted-foreground tracking-wide font-mono">Smart Token Clearances & Approvals</h4>
                     {account.allowances.length === 0 ? (
-                      <div className="bg-[#0b0c0e]/30 border border-dashed border-gray-800 text-center py-5 rounded-xl text-xs text-gray-500">
+                      <div className="bg-card/30 border border-dashed border-border text-center py-5 rounded-xl text-xs text-muted-foreground">
                         No authorized third-party spender clearances or smart allowances active.
                       </div>
                     ) : (
                       <div className="space-y-2">
                         {account.allowances.map((al, aIdx) => (
-                          <div key={aIdx} className="bg-[#0b0c0e]/80 border border-gray-800 p-3 rounded-lg flex items-center justify-between font-mono text-xs">
+                          <div key={aIdx} className="bg-card/80 border border-border p-3 rounded-lg flex items-center justify-between font-mono text-xs">
                             <div>
-                              <div className="text-white text-xs font-bold">{al.tokenCode} Allowance</div>
-                              <div className="text-[10px] text-gray-500 mt-0.5">Spender address: {al.spender}</div>
+                              <div className="text-foreground text-xs font-bold">{al.tokenCode} Allowance</div>
+                              <div className="text-[10px] text-muted-foreground mt-0.5">Spender address: {al.spender}</div>
                             </div>
                             <span className="text-red-400 font-bold text-xs">{al.amount}</span>
                           </div>
@@ -1588,22 +1588,22 @@ export function DemoModeSimulation() {
           </div>
 
           {/* --- Exchange Transfer Problem Section (Phase 7) --- */}
-          <div className="bg-[#12141a]/95 border border-gray-800 p-6 rounded-3xl space-y-4" id="relay_mediator_section">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-gray-850 pb-3">
+          <div className="bg-card/95 border border-border p-6 rounded-3xl space-y-4" id="relay_mediator_section">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-border pb-3">
               <div>
-                <h3 className="text-sm font-semibold font-sans uppercase tracking-wider text-amber-400 flex items-center gap-2">
+                <h3 className="text-sm font-semibold font-sans uppercase tracking-wider text-amber-600 flex items-center gap-2">
                   <ShieldAlert className="h-4 w-4 shrink-0" />
                   Phase 7: Resolve Exchange Transfer Deficit
                 </h3>
-                <p className="text-[11px] text-gray-400 mt-1 leading-relaxed">
+                <p className="text-[11px] text-muted-foreground mt-1 leading-relaxed">
                   Most modern spot exchanges (Coinbase, Binance, Kraken) do <b>NOT</b> detect or credit standard <code>ACCOUNT_MERGE</code> ledger endpoints, meaning funds merged directly will be lost forever in their omnibus addresses.
                 </p>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-xs text-gray-400 font-medium whitespace-nowrap">Deploy Mediator:</span>
+                <span className="text-xs text-muted-foreground font-medium whitespace-nowrap">Deploy Mediator:</span>
                 <button 
                   onClick={() => setUseMediator(prev => !prev)}
-                  className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${useMediator ? "bg-amber-500" : "bg-gray-800"}`}
+                  className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${useMediator ? "bg-amber-500" : "bg-secondary"}`}
                 >
                   <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${useMediator ? "translate-x-5" : "translate-x-0"}`} />
                 </button>
@@ -1620,48 +1620,48 @@ export function DemoModeSimulation() {
                   id="mediator_diagram"
                 >
                   {/* Schematic Flow Chart */}
-                  <div className="bg-gray-950 p-4 rounded-xl border border-gray-900 grid grid-cols-1 md:grid-cols-5 items-center justify-center text-center gap-1">
-                    <div className="p-2 border border-gray-800 bg-[#0c0e12] rounded-lg">
+                  <div className="bg-card p-4 rounded-xl border border-border grid grid-cols-1 md:grid-cols-5 items-center justify-center text-center gap-1">
+                    <div className="p-2 border border-border bg-card rounded-lg">
                       <div className="text-[10px] text-red-400 font-bold font-mono">YOUR DECAYING WALLET</div>
-                      <div className="text-[11px] truncate mt-1 text-white">{account.accountId.substring(0, 10)}...</div>
+                      <div className="text-[11px] truncate mt-1 text-foreground">{account.accountId.substring(0, 10)}...</div>
                     </div>
-                    <div className="text-gray-600 font-bold flex justify-center text-center py-1 md:py-0">
+                    <div className="text-muted-foreground font-bold flex justify-center text-center py-1 md:py-0">
                       <ChevronRight className="h-5 w-5 rotate-90 md:rotate-0" />
                     </div>
                     <div className="p-2 border border-amber-500/30 bg-amber-500/5 rounded-lg">
-                      <div className="text-[10px] text-amber-400 font-bold font-mono">TEMPORARY MEDIATOR</div>
-                      <div className="text-[11px] text-white font-mono mt-1">Staged Proxy Contract</div>
+                      <div className="text-[10px] text-amber-600 font-bold font-mono">TEMPORARY MEDIATOR</div>
+                      <div className="text-[11px] text-foreground font-mono mt-1">Staged Proxy Contract</div>
                     </div>
-                    <div className="text-gray-600 font-bold flex justify-center text-center py-1 md:py-0">
+                    <div className="text-muted-foreground font-bold flex justify-center text-center py-1 md:py-0">
                       <ChevronRight className="h-5 w-5 rotate-90 md:rotate-0" />
                     </div>
-                    <div className="p-2 border border-green-500/20 bg-[#0c0e12] rounded-lg">
+                    <div className="p-2 border border-green-500/20 bg-card rounded-lg">
                       <div className="text-[10px] text-green-400 font-bold font-mono">EXCHANGE DESK</div>
-                      <div className="text-[11px] text-white mt-1">With strict MEMO tag</div>
+                      <div className="text-[11px] text-foreground mt-1">With strict MEMO tag</div>
                     </div>
                   </div>
 
                   {/* Settings */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-1">
-                      <label className="text-[10px] uppercase text-gray-500 font-bold font-mono block">Exchange Deposit Public Key</label>
+                      <label className="text-[10px] uppercase text-muted-foreground font-bold font-mono block">Exchange Deposit Public Key</label>
                       <input 
                         type="text" 
                         value={exchangeDepositAddress}
                         onChange={(e) => setExchangeDepositAddress(e.target.value)}
-                        className="w-full text-xs font-mono bg-gray-950 border border-gray-800 rounded-lg px-3 py-2 text-white h-9 focus:outline-none"
+                        className="w-full text-xs font-mono bg-card border border-border rounded-lg px-3 py-2 text-foreground h-9 focus:outline-none"
                       />
                     </div>
                     <div className="space-y-1">
                       <div className="flex justify-between items-center">
-                        <label className="text-[10px] uppercase text-gray-500 font-bold font-mono block">Exchange Payment MEMO (Required)</label>
+                        <label className="text-[10px] uppercase text-muted-foreground font-bold font-mono block">Exchange Payment MEMO (Required)</label>
                         <span className="text-[9px] text-red-500 font-bold">MUTISIG REQUIRED</span>
                       </div>
                       <input 
                         type="text" 
                         value={exchangeMemo}
                         onChange={(e) => setExchangeMemo(e.target.value)}
-                        className="w-full text-xs font-mono bg-gray-950 border border-gray-800 rounded-lg px-3 py-2 text-white h-9 focus:outline-none"
+                        className="w-full text-xs font-mono bg-card border border-border rounded-lg px-3 py-2 text-foreground h-9 focus:outline-none"
                       />
                     </div>
                   </div>
@@ -1674,13 +1674,13 @@ export function DemoModeSimulation() {
                   className="space-y-2 overflow-hidden bg-red-955/20 border border-red-500/10 p-4 rounded-xl"
                   id="direct_merge_details"
                 >
-                  <label className="text-[10px] uppercase text-gray-500 font-bold font-mono block">Direct Stellar Wallet Recipient (Strict Non-Exchange URL)</label>
+                  <label className="text-[10px] uppercase text-muted-foreground font-bold font-mono block">Direct Stellar Wallet Recipient (Strict Non-Exchange URL)</label>
                   <input 
                     type="text" 
                     value={targetMergeAddress}
                     onChange={(e) => setTargetMergeAddress(e.target.value)}
                     placeholder="G..." 
-                    className="w-full text-xs font-mono bg-gray-950 border border-gray-800 rounded-lg px-3 py-2 text-white focus:outline-none"
+                    className="w-full text-xs font-mono bg-card border border-border rounded-lg px-3 py-2 text-foreground focus:outline-none"
                   />
                   <div className="text-[11px] text-red-400 flex items-start gap-1.5 mt-2">
                     <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-red-500" />
@@ -1692,15 +1692,15 @@ export function DemoModeSimulation() {
           </div>
 
           {/* --- Bottom interactive dry-run inspector / json builder & demolish final --- */}
-          <div className="bg-[#12141a]/95 border border-gray-800 rounded-3xl overflow-hidden shadow-xl" id="comp_terminal">
-            <div className="bg-gray-900/60 px-5 py-3 border-b border-gray-800 flex justify-between items-center">
+          <div className="bg-card/95 border border-border rounded-3xl overflow-hidden shadow-xl" id="comp_terminal">
+            <div className="bg-muted/60 px-5 py-3 border-b border-border flex justify-between items-center">
               <div className="flex items-center gap-2">
                 <span className="flex h-2 w-2 rounded-full bg-red-500 animate-pulse"></span>
-                <h3 className="text-xs font-semibold uppercase font-mono tracking-wider text-gray-200">Terminal Command Compiler</h3>
+                <h3 className="text-xs font-semibold uppercase font-mono tracking-wider text-foreground">Terminal Command Compiler</h3>
               </div>
               <button 
                 onClick={compileDryRun}
-                className="text-xs bg-[#0b0c0e] hover:bg-gray-850 text-white font-mono border border-gray-800 px-3 py-1.5 rounded-xl transition flex items-center gap-1"
+                className="text-xs bg-card hover:bg-secondary text-foreground font-mono border border-border px-3 py-1.5 rounded-xl transition flex items-center gap-1"
                 id="dry_run_btn"
               >
                 <Eye className="h-3.5 w-3.5" /> Compiler Dry Run Options
@@ -1714,25 +1714,25 @@ export function DemoModeSimulation() {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="bg-gray-950 border-b border-gray-800 overflow-hidden"
+                  className="bg-card border-b border-border overflow-hidden"
                   id="dry_run_view_container"
                 >
                   <div className="p-5 space-y-4">
-                    <div className="flex justify-between items-center border-b border-gray-800 pb-2">
-                      <div className="text-xs uppercase font-bold text-amber-400 font-sans flex items-center gap-1.5">
+                    <div className="flex justify-between items-center border-b border-border pb-2">
+                      <div className="text-xs uppercase font-bold text-amber-600 font-sans flex items-center gap-1.5">
                         <Activity className="h-4 w-4" /> Proposed Stellar Demolition Ledger Steps ({dryRunReport.length})
                       </div>
-                      <button onClick={() => setShowDryRun(false)} className="text-gray-500 hover:text-white">
+                      <button onClick={() => setShowDryRun(false)} className="text-muted-foreground hover:text-foreground">
                         <X className="h-4 w-4" />
                       </button>
                     </div>
 
-                    <div className="max-h-64 overflow-y-auto space-y-2 font-mono text-xs text-gray-300">
+                    <div className="max-h-64 overflow-y-auto space-y-2 font-mono text-xs text-muted-foreground">
                       {dryRunReport.map((dr, oIdx) => (
-                        <div key={oIdx} className="bg-gray-900 border border-gray-800 px-3 py-2 rounded flex flex-col md:flex-row md:items-center justify-between gap-1.5">
+                        <div key={oIdx} className="bg-muted border border-border px-3 py-2 rounded flex flex-col md:flex-row md:items-center justify-between gap-1.5">
                           <div>
-                            <span className="text-[10px] text-gray-500 uppercase font-black tracking-widest">{dr.phase}</span>
-                            <div className="text-white font-bold text-xs mt-0.5">{dr.action}</div>
+                            <span className="text-[10px] text-muted-foreground uppercase font-black tracking-widest">{dr.phase}</span>
+                            <div className="text-foreground font-bold text-xs mt-0.5">{dr.action}</div>
                             <div className="text-cyan-400 text-[10px] mt-0.5 select-all">{dr.operation}</div>
                           </div>
                           <span className="text-[10px] font-sans font-bold text-green-300 bg-green-950/40 border border-green-900/50 px-2 py-0.5 rounded-full shrink-0">
@@ -1747,12 +1747,12 @@ export function DemoModeSimulation() {
             </AnimatePresence>
 
             {/* Demolition Terminal Console Live Stream Logs */}
-            <div className="p-4 bg-black/90 font-mono text-xs text-green-400 min-h-[140px] max-h-[220px] overflow-y-auto space-y-1 select-text border-b border-gray-850">
+            <div className="p-4 bg-background/90 font-mono text-xs text-green-400 min-h-[140px] max-h-[220px] overflow-y-auto space-y-1 select-text border-b border-border">
               {demolitionLogs.length === 0 ? (
-                <div className="text-gray-600 flex flex-col items-center justify-center py-8">
+                <div className="text-muted-foreground flex flex-col items-center justify-center py-8">
                   <Play className="h-5 w-5 mb-2 animate-bounce" />
                   <div>READY TO INGEST SIGNATURES & DESTRUCT KEYSETS</div>
-                  <div className="text-[10px] mt-1 text-gray-500">Proposed operations will execute sequentially with cryptographic verification.</div>
+                  <div className="text-[10px] mt-1 text-muted-foreground">Proposed operations will execute sequentially with cryptographic verification.</div>
                 </div>
               ) : (
                 demolitionLogs.map((log, lIdx) => (
@@ -1764,13 +1764,13 @@ export function DemoModeSimulation() {
             </div>
 
             {/* Demolition Confirmation Sliders and warning flags (Phase 8) */}
-            <div className="p-5 md:p-6 bg-gray-900/30 space-y-4">
+            <div className="p-5 md:p-6 bg-muted/30 space-y-4">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="space-y-1 max-w-md">
-                  <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                  <h4 className="text-xs font-bold text-foreground uppercase tracking-wider flex items-center gap-1.5">
                     <ShieldAlert className="h-4 w-4 text-red-500 animate-bounce" /> Warning: Action is Irreversible!
                   </h4>
-                  <p className="text-[11px] text-gray-400 leading-relaxed">
+                  <p className="text-[11px] text-muted-foreground leading-relaxed">
                     Account Demolition performs a total Stellar transaction sweep that permanently collapses trustlines and executes <code>ACCOUNT_MERGE</code>. Private key access to this address will have no authority on the network.
                   </p>
                 </div>
@@ -1779,14 +1779,14 @@ export function DemoModeSimulation() {
                 {!demolitionComplete && (
                   <div className="w-full md:w-auto flex flex-col md:flex-row gap-2">
                     <div className="space-y-1 text-left">
-                      <div className="text-[9px] uppercase tracking-wide text-gray-500 font-bold">Type &quot;DEMOLISH&quot; to authorize:</div>
+                      <div className="text-[9px] uppercase tracking-wide text-muted-foreground font-bold">Type &quot;DEMOLISH&quot; to authorize:</div>
                       <input 
                         type="text" 
                         value={confirmInput}
                         onChange={(e) => setConfirmInput(e.target.value)}
                         placeholder="INPUT ACTION PHRASE"
                         disabled={!safetyCheck.canDemolish || isDemolishing}
-                        className="w-full text-center text-xs font-bold uppercase tracking-wider bg-gray-950 border border-red-500/20 rounded-xl px-4 py-2.5 text-white placeholder-gray-700 h-10 focus:outline-none focus:border-red-500 transition disabled:opacity-40"
+                        className="w-full text-center text-xs font-bold uppercase tracking-wider bg-card border border-red-500/20 rounded-xl px-4 py-2.5 text-foreground placeholder:text-muted-foreground h-10 focus:outline-none focus:border-red-500 transition disabled:opacity-40"
                       />
                     </div>
                   </div>
@@ -1797,7 +1797,7 @@ export function DemoModeSimulation() {
               {!demolitionComplete ? (
                 <div 
                   ref={sliderRef}
-                  className={`relative w-full h-12 bg-gray-950 border border-gray-800 rounded-xl overflow-hidden flex items-center justify-center transition-all ${!safetyCheck.canDemolish ? "opacity-40 cursor-not-allowed" : "cursor-grab active:cursor-grabbing"}`}
+                  className={`relative w-full h-12 bg-card border border-border rounded-xl overflow-hidden flex items-center justify-center transition-all ${!safetyCheck.canDemolish ? "opacity-40 cursor-not-allowed" : "cursor-grab active:cursor-grabbing"}`}
                   onMouseMove={handleSliderDrag}
                   onTouchMove={handleSliderDrag}
                   onMouseUp={handleSliderEnd}
@@ -1814,7 +1814,7 @@ export function DemoModeSimulation() {
                   {/* Pull Node handle */}
                   <div 
                     style={{ left: `calc(${sliderPosition}% - 24px)` }}
-                    className="absolute top-1 bottom-1 w-12 bg-gradient-to-br from-red-500 to-red-600 rounded-lg shadow-lg flex items-center justify-center text-white border border-red-400 select-none transition-all duration-75 h-10"
+                    className="absolute top-1 bottom-1 w-12 bg-gradient-to-br from-red-500 to-red-600 rounded-lg shadow-lg flex items-center justify-center text-foreground border border-red-400 select-none transition-all duration-75 h-10"
                     id="slider_drag_node"
                   >
                     <Skull className="h-5 w-5 animate-pulse" />
@@ -1838,7 +1838,7 @@ export function DemoModeSimulation() {
                     <Check className="h-6 w-6 text-green-400 shrink-0" />
                     <div>
                       <h4 className="text-xs font-bold text-green-300 uppercase tracking-wide">Wallet Merger & Demolition Succeeded!</h4>
-                      <p className="text-[11px] text-gray-400 mt-0.5">Account merged and reserves successfully liquidated to destination endpoint. Ledger state terminated.</p>
+                      <p className="text-[11px] text-muted-foreground mt-0.5">Account merged and reserves successfully liquidated to destination endpoint. Ledger state terminated.</p>
                     </div>
                   </div>
                   <button 
@@ -1849,7 +1849,7 @@ export function DemoModeSimulation() {
                       setSliderPosition(0);
                       setDemolitionLogs([]);
                     }}
-                    className="text-xs bg-gray-900 border border-gray-800 hover:text-white px-3 py-1.5 rounded-xl font-sans"
+                    className="text-xs bg-muted border border-border hover:text-foreground px-3 py-1.5 rounded-xl font-sans"
                   >
                     Reset Scenario Simulator
                   </button>
@@ -1862,55 +1862,55 @@ export function DemoModeSimulation() {
 
       {/* --- Helper modal: Stellar merge rules and compliance check list (Phase 1 to 8) --- */}
       {showHelperModal && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 backdrop-blur-sm" id="rules_modal_overlay">
-          <div className="bg-[#12141a] border border-gray-800 max-w-2xl w-full p-6 md:p-8 rounded-3xl space-y-6 relative max-h-[85vh] overflow-y-auto" id="rules_modal_body">
+        <div className="fixed inset-0 bg-background/80 flex items-center justify-center p-4 z-50 backdrop-blur-sm" id="rules_modal_overlay">
+          <div className="bg-card border border-border max-w-2xl w-full p-6 md:p-8 rounded-3xl space-y-6 relative max-h-[85vh] overflow-y-auto" id="rules_modal_body">
             <button 
               onClick={() => setShowHelperModal(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-white transition"
+              className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition"
             >
               <X className="h-5 w-5" />
             </button>
             
             <div className="flex items-center gap-3">
-              <Skull className="h-6 w-6 text-amber-500" />
-              <h2 className="text-lg font-bold text-white uppercase tracking-wider">Stellar Account Merger Demolition Checklist</h2>
+              <Skull className="h-6 w-6 text-amber-600" />
+              <h2 className="text-lg font-bold text-foreground uppercase tracking-wider">Stellar Account Merger Demolition Checklist</h2>
             </div>
             
-            <p className="text-xs text-gray-400 leading-relaxed">
+            <p className="text-xs text-muted-foreground leading-relaxed">
               We engineered this product according to Stellar Core protocol standards. The demolition sequencer strictly executes the following phases client-side for absolute security:
             </p>
 
-            <ul className="space-y-3.5 font-mono text-xs text-gray-300">
-              <li className="flex gap-2 items-start bg-gray-950 p-3 rounded-lg border border-gray-900">
-                <span className="text-amber-500 shrink-0">[Phase 1]</span>
+            <ul className="space-y-3.5 font-mono text-xs text-muted-foreground">
+              <li className="flex gap-2 items-start bg-card p-3 rounded-lg border border-border">
+                <span className="text-amber-600 shrink-0">[Phase 1]</span>
                 <span><b>Account Discovery</b>: Deep-scrapes network validators for trustlines, data elements, sponsorships, claims, and Soroban DeFi positions.</span>
               </li>
-              <li className="flex gap-2 items-start bg-gray-950 p-3 rounded-lg border border-gray-900">
-                <span className="text-amber-500 shrink-0">[Phase 2]</span>
+              <li className="flex gap-2 items-start bg-card p-3 rounded-lg border border-border">
+                <span className="text-amber-600 shrink-0">[Phase 2]</span>
                 <span><b>Safety Analysis Check</b>: Blockers identify if account is sponsoring others or has multiple active key thresholds needing cosigns.</span>
               </li>
-              <li className="flex gap-2 items-start bg-gray-950 p-3 rounded-lg border border-gray-900">
-                <span className="text-amber-500 shrink-0">[Phase 3]</span>
+              <li className="flex gap-2 items-start bg-card p-3 rounded-lg border border-border">
+                <span className="text-amber-600 shrink-0">[Phase 3]</span>
                 <span><b>Position Cleanup</b>: Cancel Classic DEX offers, exit LP Pools, and exit DeFi smart-contracts (Blend supplies, Soroswap pools, Aquarius farming).</span>
               </li>
-              <li className="flex gap-2 items-start bg-gray-950 p-3 rounded-lg border border-gray-900">
-                <span className="text-amber-500 shrink-0">[Phase 4]</span>
+              <li className="flex gap-2 items-start bg-card p-3 rounded-lg border border-border">
+                <span className="text-amber-600 shrink-0">[Phase 4]</span>
                 <span><b>Path-Payment Liquidation</b>: Routing remaining token balances straight into native XLM utilizing the best liquidity paths.</span>
               </li>
-              <li className="flex gap-2 items-start bg-gray-950 p-3 rounded-lg border border-gray-900">
-                <span className="text-amber-500 shrink-0">[Phase 5]</span>
+              <li className="flex gap-2 items-start bg-card p-3 rounded-lg border border-border">
+                <span className="text-amber-600 shrink-0">[Phase 5]</span>
                 <span><b>Pruning Cleanup</b>: Revoking all signers to 0 weight, deleting custom data registries (ManageData), and erasing empty trustlines (limit 0).</span>
               </li>
-              <li className="flex gap-2 items-start bg-gray-950 p-3 rounded-lg border border-gray-900">
-                <span className="text-amber-500 shrink-0">[Phase 6]</span>
+              <li className="flex gap-2 items-start bg-card p-3 rounded-lg border border-border">
+                <span className="text-amber-600 shrink-0">[Phase 6]</span>
                 <span><b>Claim Recovery</b>: Automatically sweeping any claimable balance wrappers into active balance buffers prior to demolition.</span>
               </li>
-              <li className="flex gap-2 items-start bg-gray-950 p-3 rounded-lg border border-gray-900">
-                <span className="text-amber-500 shrink-0">[Phase 7]</span>
+              <li className="flex gap-2 items-start bg-card p-3 rounded-lg border border-border">
+                <span className="text-amber-600 shrink-0">[Phase 7]</span>
                 <span><b>Temporary Mediator Relayer</b>: Injects an active payment-relay with exchange-compatible memos to prevent merged fund loss.</span>
               </li>
-              <li className="flex gap-2 items-start bg-gray-950 p-3 rounded-lg border border-gray-900">
-                <span className="text-amber-500 shrink-0">[Phase 8]</span>
+              <li className="flex gap-2 items-start bg-card p-3 rounded-lg border border-border">
+                <span className="text-amber-600 shrink-0">[Phase 8]</span>
                 <span><b>Final Account Demolition</b>: Issues the terminal <code>ACCOUNT_MERGE</code> operation, retrieving active base reserve funds.</span>
               </li>
             </ul>
@@ -1926,14 +1926,14 @@ export function DemoModeSimulation() {
       )}
 
       {/* --- Footer Signature Segment --- */}
-      <footer className="border-t border-gray-800 mt-12 pt-6 flex flex-col md:flex-row items-center justify-between text-xs text-gray-500 gap-4" id="tool_footer">
+      <footer className="border-t border-border mt-12 pt-6 flex flex-col md:flex-row items-center justify-between text-xs text-muted-foreground gap-4" id="tool_footer">
         <div className="flex items-center gap-2">
-          <BookOpen className="h-4 w-4 text-gray-600" />
+          <BookOpen className="h-4 w-4 text-muted-foreground" />
           <span>Secured client-side via Stellar Seed cryptos. All calculations fully testable under simulated conditions.</span>
         </div>
         <div className="flex gap-4">
-          <a href="#" onClick={(e) => { e.preventDefault(); setShowHelperModal(true); }} className="hover:text-gray-300 transition">Protocol Documentation</a>
-          <span className="text-gray-700">|</span>
+          <a href="#" onClick={(e) => { e.preventDefault(); setShowHelperModal(true); }} className="hover:text-muted-foreground transition">Protocol Documentation</a>
+          <span className="text-muted-foreground">|</span>
           <span>Status: Horizon Services Active</span>
         </div>
       </footer>
