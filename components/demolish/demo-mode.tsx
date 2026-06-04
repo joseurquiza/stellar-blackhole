@@ -900,7 +900,7 @@ export function DemoModeSimulation() {
   };
 
   return (
-    <div className="min-h-screen px-4 py-8 md:px-8 max-w-7xl mx-auto flex flex-col justify-between" id="app_root_layout">
+    <div className="dark bg-[#0a0b0f] text-gray-200 rounded-2xl border border-gray-800 px-4 py-8 md:px-8 flex flex-col justify-between overflow-hidden" id="app_root_layout">
       {/* --- Top Navigation Header --- */}
       <header className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-gray-800 pb-5 mb-8 gap-4" id="tool_header">
         <div className="flex items-center gap-3">
