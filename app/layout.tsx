@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { AiAssistant } from '@/components/ai-assistant'
 import { ThemeProvider } from '@/components/theme-provider'
 
 const inter = Inter({ 
@@ -30,7 +29,6 @@ export default function RootLayout({
       <body className={`${inter.className} font-sans antialiased`} suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <div className="site-shell">{children}</div>
-          <AiAssistant />
         </ThemeProvider>
       </body>
     </html>

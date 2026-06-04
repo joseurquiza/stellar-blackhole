@@ -30,7 +30,7 @@ export function MobileMenu() {
           <div className="fixed inset-0 bg-black/50" onClick={closeMenu} />
           <div className="fixed top-0 right-0 h-full w-64 bg-black border-l border-gray-800 p-6">
             <div className="flex items-center justify-between mb-8">
-              <Link href="/" onClick={closeMenu} className="flex items-center gap-2">
+              <Link href="/demolish" onClick={closeMenu} className="flex items-center gap-2">
                 <Image
                   src="/images/action-tokens-logo.jpg"
                   alt="Action Tokens"
@@ -50,13 +50,6 @@ export function MobileMenu() {
             </div>
             
             <nav className="space-y-4">
-              <Link
-                href="/"
-                onClick={closeMenu}
-                className="block py-2 text-gray-300 hover:text-white transition-colors"
-              >
-                Home
-              </Link>
               <BlackHoleLink
                 onNavigate={closeMenu}
                 className="block py-2 text-gray-300 hover:text-white transition-colors"

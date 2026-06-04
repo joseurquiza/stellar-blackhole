@@ -8,7 +8,7 @@ import { BlackHoleLink } from "./blackhole-link"
 export function Header() {
   return (
     <header className="flex items-center justify-between p-4 md:p-6 border-b border-gray-800">
-      <Link href="/" className="flex items-center gap-3">
+      <Link href="/demolish" className="flex items-center gap-3">
         <Image
           src="/images/action-tokens-logo.jpg"
           alt="Action Tokens"
@@ -21,9 +21,6 @@ export function Header() {
       
       {/* Desktop Navigation */}
       <nav className="hidden lg:flex items-center gap-6 text-gray-300">
-        <Link href="/" className="hover:text-white transition-colors">
-          Home
-        </Link>
         <BlackHoleLink className="hover:text-white transition-colors">
           BlackHole
         </BlackHoleLink>
