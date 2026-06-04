@@ -932,7 +932,7 @@ export function DemoModeSimulation() {
             id="live_horizon_mode_btn"
           >
             <Search className="h-3.5 w-3.5" />
-            Horizon Live Explorer
+            Account Explorer
           </button>
         </div>
       </header>
