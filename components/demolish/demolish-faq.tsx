@@ -3,7 +3,7 @@ import { HelpCircle } from "lucide-react"
 /**
  * Single source of truth for Stellar BlackHole's answer-engine content.
  * Both the visible FAQ section (below) and the FAQPage JSON-LD in
- * app/demolish/layout.tsx consume this array, so they never drift apart.
+ * app/page.tsx consume this array, so they never drift apart.
  * Answers are written as concise, self-contained answers — the format
  * answer engines (ChatGPT, Perplexity, Google AI Overviews, Gemini) prefer.
  */

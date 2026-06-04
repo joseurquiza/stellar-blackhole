@@ -14,7 +14,7 @@ import {
   Map as MapIcon,
 } from "lucide-react"
 
-const PAGE_URL = "https://www.action-tokens.com/demolish/docs"
+const PAGE_URL = "https://www.action-tokens.com/docs"
 const TITLE = "Stellar BlackHole — Technical Architecture"
 const DESCRIPTION =
   "Technical architecture of Stellar BlackHole: a fully non-custodial, client-side tool that audits a Stellar account, builds a verifiable demolition plan, and merges the account to reclaim locked XLM reserves. Keys never leave the browser."
@@ -22,7 +22,7 @@ const DESCRIPTION =
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
-  alternates: { canonical: "/demolish/docs" },
+  alternates: { canonical: "/docs" },
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,
@@ -67,7 +67,7 @@ export default function ArchitecturePage() {
         {/* Title block */}
         <header className="mb-10 max-w-3xl">
           <Link
-            href="/demolish"
+            href="/"
             className="mb-6 inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
             <ArrowLeft className="h-4 w-4" /> Back to Stellar BlackHole
@@ -180,7 +180,7 @@ export default function ArchitecturePage() {
                 dependencies and could be reused by a CLI or a different frontend.
               </p>
               <CodeBlock>
-                {`app/demolish/                  UI route (wizard + SEO/JSON-LD layout)
+                {`app/page.tsx                   UI route (wizard + SEO/JSON-LD)
 components/demolish/
   use-demolisher.ts            React state machine orchestrating the 6 stages
   live-wizard.tsx              Stage rendering, confirmation gating
@@ -402,12 +402,8 @@ lib/stellar/                   Pure engine (no React)
             <footer className="border-t border-border pt-8 text-sm text-muted-foreground">
               <p>
                 Stellar BlackHole is part of the Action Tokens platform.{" "}
-                <Link href="/demolish" className="text-primary hover:underline">
-                  Open the tool
-                </Link>{" "}
-                or return to{" "}
                 <Link href="/" className="text-primary hover:underline">
-                  the homepage
+                  Open the tool
                 </Link>
                 .
               </p>
