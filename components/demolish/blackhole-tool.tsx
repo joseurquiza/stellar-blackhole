@@ -1,14 +1,31 @@
 "use client"
 
 import { useState } from "react"
-import { Skull, FlaskConical, ShieldCheck, Radio } from "lucide-react"
+import { Skull, FlaskConical, ShieldCheck, Radio, Wrench } from "lucide-react"
 import { LiveWizard } from "@/components/demolish/live-wizard"
 import { DemoModeSimulation } from "@/components/demolish/demo-mode"
 import { DemolishFaq } from "@/components/demolish/demolish-faq"
 import { ThemeToggle } from "@/components/theme-toggle"
 
+type ToolMode = "live" | "demo" | "toolkit"
+
+const MODE_META: Record<ToolMode, { label: string; description: string }> = {
+  live: {
+    label: "Live Mode",
+    description: "Signs and submits real transactions on Stellar",
+  },
+  demo: {
+    label: "Demo Mode",
+    description: "The real flow with fabricated data — nothing is broadcast",
+  },
+  toolkit: {
+    label: "Toolkit",
+    description: "Sandbox scenarios and a read-only account explorer",
+  },
+}
+
 export function BlackholeTool() {
-  const [demoMode, setDemoMode] = useState(false)
+  const [mode, setMode] = useState<ToolMode>("live")
 
   return (
     <main className="demolish-theme relative min-h-screen overflow-hidden bg-background">
@@ -66,21 +83,17 @@ export function BlackholeTool() {
           <div className="flex flex-col gap-3 rounded-xl border bg-card p-3 shadow-sm sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-2.5">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted">
-                {demoMode ? (
+                {mode === "live" ? (
+                  <Radio className="h-4 w-4 text-primary" />
+                ) : mode === "demo" ? (
                   <FlaskConical className="h-4 w-4 text-muted-foreground" />
                 ) : (
-                  <Radio className="h-4 w-4 text-primary" />
+                  <Wrench className="h-4 w-4 text-muted-foreground" />
                 )}
               </div>
               <div className="flex flex-col">
-                <span className="text-sm font-medium leading-tight">
-                  {demoMode ? "Demo Mode" : "Live Mode"}
-                </span>
-                <span className="text-xs text-muted-foreground">
-                  {demoMode
-                    ? "Simulated walkthrough — no real network calls"
-                    : "Signs and submits real transactions on Stellar"}
-                </span>
+                <span className="text-sm font-medium leading-tight">{MODE_META[mode].label}</span>
+                <span className="text-xs text-muted-foreground">{MODE_META[mode].description}</span>
               </div>
             </div>
 
@@ -89,37 +102,31 @@ export function BlackholeTool() {
               aria-label="Tool mode"
               className="inline-flex shrink-0 rounded-lg border bg-muted/50 p-0.5 text-xs font-medium"
             >
-              <button
-                type="button"
-                role="tab"
-                aria-selected={!demoMode}
-                onClick={() => setDemoMode(false)}
-                className={`rounded-md px-4 py-1.5 transition-colors ${
-                  !demoMode
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                Live
-              </button>
-              <button
-                type="button"
-                role="tab"
-                aria-selected={demoMode}
-                onClick={() => setDemoMode(true)}
-                className={`rounded-md px-4 py-1.5 transition-colors ${
-                  demoMode
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                Demo
-              </button>
+              {(["live", "demo", "toolkit"] as ToolMode[]).map((m) => (
+                <button
+                  key={m}
+                  type="button"
+                  role="tab"
+                  aria-selected={mode === m}
+                  onClick={() => setMode(m)}
+                  className={`rounded-md px-4 py-1.5 capitalize transition-colors ${
+                    mode === m
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {m}
+                </button>
+              ))}
             </div>
           </div>
         </header>
 
-        {demoMode ? <DemoModeSimulation /> : <LiveWizard />}
+        {mode === "toolkit" ? (
+          <DemoModeSimulation />
+        ) : (
+          <LiveWizard simulate={mode === "demo"} />
+        )}
 
         <DemolishFaq />
       </div>

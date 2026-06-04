@@ -28,6 +28,7 @@ import {
   AlertCircle,
   CheckCircle2,
   ExternalLink,
+  FlaskConical,
 } from "lucide-react"
 import { useDemolisher } from "./use-demolisher"
 import { AuditDashboard } from "./audit-dashboard"
@@ -47,8 +48,8 @@ const STAGE_LABELS: Record<(typeof STAGES)[number], string> = {
   result: "Result",
 }
 
-export function LiveWizard() {
-  const d = useDemolisher()
+export function LiveWizard({ simulate = false }: { simulate?: boolean }) {
+  const d = useDemolisher({ simulate })
   const { state } = d
   const [pubInput, setPubInput] = useState("")
   const [confirmText, setConfirmText] = useState("")
@@ -58,6 +59,17 @@ export function LiveWizard() {
 
   return (
     <div className="space-y-6">
+      {simulate && (
+        <div className="flex items-start gap-2.5 rounded-lg border border-primary/30 bg-primary/5 px-3 py-2.5 text-xs">
+          <FlaskConical className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+          <p className="text-pretty text-muted-foreground">
+            <span className="font-medium text-foreground">Simulation.</span> This is the real demolition flow with
+            fabricated data. No account is read from Horizon, nothing is signed, and no transaction is broadcast.
+            Type anything to continue at each step.
+          </p>
+        </div>
+      )}
+
       {/* progress */}
       <div>
         <div className="flex items-center gap-1.5">
@@ -133,7 +145,7 @@ export function LiveWizard() {
                   onChange={(e) => setPubInput(e.target.value.trim())}
                   className="font-mono text-sm"
                 />
-                <Button onClick={() => d.runAudit(pubInput)} disabled={state.loading || !pubInput}>
+                <Button onClick={() => d.runAudit(pubInput)} disabled={state.loading || (!pubInput && !simulate)}>
                   {state.loading ? <Spinner className="h-4 w-4" /> : <Search className="h-4 w-4" />}
                   <span className="ml-1 hidden sm:inline">Audit</span>
                 </Button>
@@ -141,8 +153,9 @@ export function LiveWizard() {
             </div>
 
             <p className="text-xs text-muted-foreground">
-              Paste the account&apos;s public key (starts with G). You&apos;ll provide the secret key only at the
-              signing step, right before execution.
+              {simulate
+                ? "Paste any public key, or just press Audit to load a sample account. No real account is contacted."
+                : "Paste the account's public key (starts with G). You'll provide the secret key only at the signing step, right before execution."}
             </p>
           </CardContent>
         </Card>
@@ -212,13 +225,23 @@ export function LiveWizard() {
 
             <div className="rounded-lg border p-4">
               <h4 className="mb-3 text-sm font-semibold">Sign</h4>
-              {state.audit && (
-                <SigningPanel
-                  audit={state.audit}
-                  secretKeys={d.secretKeys}
-                  setSecretKeys={d.setSecretKeys}
-                  multisigWeight={d.multisigWeight}
-                />
+              {simulate ? (
+                <div className="flex items-start gap-2.5 text-sm text-muted-foreground">
+                  <FlaskConical className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                  <p className="text-pretty">
+                    In the live tool you would paste your secret key here to sign locally in this tab. In the
+                    simulation, signing is skipped — just continue to watch the execution play out.
+                  </p>
+                </div>
+              ) : (
+                state.audit && (
+                  <SigningPanel
+                    audit={state.audit}
+                    secretKeys={d.secretKeys}
+                    setSecretKeys={d.setSecretKeys}
+                    multisigWeight={d.multisigWeight}
+                  />
+                )
               )}
             </div>
 
@@ -235,11 +258,15 @@ export function LiveWizard() {
                 </AlertDialogTrigger>
                 <AlertDialogContent className="demolish-theme bg-background">
                   <AlertDialogHeader>
-                    <AlertDialogTitle>This permanently destroys the account</AlertDialogTitle>
+                    <AlertDialogTitle>
+                      {simulate ? "Confirm the simulated demolition" : "This permanently destroys the account"}
+                    </AlertDialogTitle>
                     <AlertDialogDescription>
-                      {state.network === "public"
-                        ? "You are on PUBLIC mainnet. Real funds will move and the account will be closed forever."
-                        : "You are on Testnet. This rehearses the irreversible flow."}{" "}
+                      {simulate
+                        ? "Nothing is broadcast — this just plays the execution animation so you can see the real flow."
+                        : state.network === "public"
+                          ? "You are on PUBLIC mainnet. Real funds will move and the account will be closed forever."
+                          : "You are on Testnet. This rehearses the irreversible flow."}{" "}
                       Type <span className="font-mono font-semibold">DEMOLISH</span> to confirm.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
