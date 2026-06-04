@@ -1,0 +1,359 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-inter:
+      "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    /* Light theme (default for :root / .light) */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 40%;
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 90%;
+    --input: 0 0% 88%;
+    --ring: 0 0% 20%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* Dark theme (the site's original look) */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 0%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 0%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 64%;
+    --accent: 0 0% 15%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 0 0% 83%;
+    --radius: 0.5rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+}
+
+@layer base {
+  /* Scoped theme for the Stellar BlackHole tool: "exploding star" / supernova.
+     Deep cosmic blue-black space with a brilliant electric blue-white star core
+     as the primary accent and a hot amber shockwave secondary glow.
+     Dark is the default; the global .light class flips it to a bright cosmic light.
+     All Stellar BlackHole components use semantic tokens, so these cascade cleanly. */
+  .demolish-theme {
+    --background: 226 44% 5%;
+    --foreground: 205 30% 96%;
+    --card: 224 40% 8%;
+    --card-foreground: 205 30% 96%;
+    --popover: 224 40% 8%;
+    --popover-foreground: 205 30% 96%;
+    --primary: 198 100% 60%;
+    --primary-foreground: 224 60% 7%;
+    --secondary: 222 30% 15%;
+    --secondary-foreground: 205 30% 96%;
+    --muted: 222 28% 13%;
+    --muted-foreground: 210 16% 64%;
+    --accent: 36 100% 58%;
+    --accent-foreground: 28 60% 8%;
+    --destructive: 8 88% 58%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 28% 17%;
+    --input: 220 28% 17%;
+    --ring: 198 100% 60%;
+    --radius: 0.75rem;
+    /* supernova accent glow used by gradients/shadows in the page */
+    --nova-core: 198 100% 72%;
+    --nova-shock: 36 100% 58%;
+    color: hsl(var(--foreground));
+  }
+
+  .light .demolish-theme,
+  .demolish-theme[data-theme="light"] {
+    --background: 205 60% 98%;
+    --foreground: 224 44% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 224 44% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 44% 12%;
+    /* primary/accent/destructive darkened to meet WCAG AA (>=4.5:1) with white text */
+    --primary: 202 90% 39%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 205 30% 93%;
+    --secondary-foreground: 224 44% 16%;
+    --muted: 205 28% 95%;
+    --muted-foreground: 215 16% 40%;
+    --accent: 28 92% 36%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 8 78% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 205 24% 87%;
+    --input: 205 24% 85%;
+    --ring: 202 90% 39%;
+    --nova-core: 202 92% 56%;
+    --nova-shock: 32 96% 50%;
+  }
+}
+
+@layer base {
+  /* Scoped theme for the Agent workspace: a calm, focused "mission control"
+     palette — deep slate space with an electric cyan accent. Uses semantic
+     tokens so all shadcn components cascade cleanly. */
+  .agent-theme {
+    --background: 222 47% 5%;
+    --foreground: 210 30% 96%;
+    --card: 222 40% 8%;
+    --card-foreground: 210 30% 96%;
+    --popover: 222 40% 8%;
+    --popover-foreground: 210 30% 96%;
+    --primary: 190 95% 55%;
+    --primary-foreground: 222 60% 7%;
+    --secondary: 220 30% 14%;
+    --secondary-foreground: 210 30% 96%;
+    --muted: 220 28% 12%;
+    --muted-foreground: 213 16% 62%;
+    --accent: 190 80% 18%;
+    --accent-foreground: 190 95% 75%;
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 26% 16%;
+    --input: 220 26% 16%;
+    --ring: 190 95% 55%;
+    --radius: 0.75rem;
+    color: hsl(var(--foreground));
+  }
+}
+
+@layer components {
+  .animate-tilt {
+    animation: tilt 10s infinite linear;
+  }
+
+  /* Added scroll indicator animation */
+  .animate-scroll {
+    animation: scroll 2s ease-in-out infinite;
+  }
+}
+
+@layer utilities {
+  @keyframes tilt {
+    0%,
+    50%,
+    100% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(0.5deg);
+    }
+    75% {
+      transform: rotate(-0.5deg);
+    }
+  }
+
+  /* Added keyframes for scroll animation */
+  @keyframes scroll {
+    0% {
+      transform: translateY(0);
+      opacity: 0;
+    }
+    40% {
+      opacity: 1;
+    }
+    80% {
+      transform: translateY(12px);
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+}
+
+/* Action Assistant "push" layout: site content scrunches over when the
+   assistant sidebar opens. Only on >=768px, where the sidebar is a fixed
+   max-w-md (28rem) panel; on smaller screens it overlays full-width. */
+.site-shell {
+  transition: margin-right 300ms ease-out;
+}
+
+@media (min-width: 768px) {
+  body.assistant-open .site-shell {
+    margin-right: 28rem;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   BlackHole warp transition — played when a user clicks the BlackHole link.
+   A swirling accretion disk emerges, the core pulses, then everything
+   collapses into a light flash that fills the screen before navigation.
+---------------------------------------------------------------------------- */
+.bh-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: radial-gradient(circle at center, #0b0a14 0%, #000000 70%);
+  animation: bh-fade 0.25s ease-out both;
+}
+
+.bh-scene {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(70vmin, 340px);
+  height: min(70vmin, 340px);
+  animation: bh-emerge 1.15s cubic-bezier(0.45, 0, 0.35, 1) both;
+}
+
+.bh-disk {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(255, 214, 138, 0) 18deg,
+    rgba(255, 236, 196, 0.95) 78deg,
+    rgba(255, 176, 64, 0.95) 140deg,
+    rgba(120, 170, 255, 0.55) 220deg,
+    rgba(255, 196, 92, 0.9) 300deg,
+    transparent 360deg
+  );
+  -webkit-mask: radial-gradient(circle, transparent 29%, #000 41%, #000 71%, transparent 80%);
+  mask: radial-gradient(circle, transparent 29%, #000 41%, #000 71%, transparent 80%);
+  filter: blur(6px) saturate(1.25);
+  animation: bh-spin 0.9s linear infinite;
+}
+
+.bh-disk--rev {
+  opacity: 0.55;
+  filter: blur(15px) saturate(1.4);
+  animation: bh-spin-rev 1.7s linear infinite;
+}
+
+.bh-core {
+  position: relative;
+  width: 36%;
+  height: 36%;
+  border-radius: 50%;
+  background: #000;
+  box-shadow:
+    0 0 42px 8px rgba(255, 184, 77, 0.55),
+    inset 0 0 30px 6px rgba(255, 236, 196, 0.35);
+  animation: bh-core-pulse 0.9s ease-in-out infinite;
+}
+
+.bh-flash {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 0%, rgba(255, 210, 130, 0.9) 38%, rgba(120, 170, 255, 0) 72%);
+  opacity: 0;
+  animation: bh-flash 1.15s ease-in both;
+}
+
+.bh-label {
+  position: absolute;
+  bottom: 16%;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.72);
+  animation: bh-fade 0.6s ease-out 0.25s both;
+}
+
+@keyframes bh-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes bh-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes bh-spin-rev {
+  from { transform: rotate(0deg) scale(1.28); }
+  to { transform: rotate(-360deg) scale(1.28); }
+}
+
+@keyframes bh-core-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 42px 8px rgba(255, 184, 77, 0.55),
+      inset 0 0 30px 6px rgba(255, 236, 196, 0.35);
+  }
+  50% {
+    box-shadow:
+      0 0 72px 16px rgba(255, 206, 120, 0.75),
+      inset 0 0 42px 10px rgba(120, 170, 255, 0.45);
+  }
+}
+
+@keyframes bh-emerge {
+  0% { transform: scale(0.12) rotate(-45deg); opacity: 0; }
+  30% { opacity: 1; }
+  72% { transform: scale(1) rotate(0deg); opacity: 1; }
+  100% { transform: scale(0.4) rotate(25deg); opacity: 0; }
+}
+
+@keyframes bh-flash {
+  0%, 68% { opacity: 0; transform: scale(1); }
+  82% { opacity: 0.95; transform: scale(14); }
+  100% { opacity: 1; transform: scale(220); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bh-scene,
+  .bh-disk,
+  .bh-disk--rev,
+  .bh-core,
+  .bh-flash {
+    animation-duration: 0.4s;
+    animation-iteration-count: 1;
+  }
+}
