@@ -6,7 +6,7 @@ import { LiveWizard } from "@/components/demolish/live-wizard"
 import { DemoModeSimulation } from "@/components/demolish/demo-mode"
 import { DemolishFaq } from "@/components/demolish/demolish-faq"
 
-export default function DemolishPage() {
+export function BlackholeTool() {
   const [demoMode, setDemoMode] = useState(false)
 
   return (
