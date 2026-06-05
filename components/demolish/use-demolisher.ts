@@ -7,6 +7,7 @@ import { createSignerSet, availableWeight, type SignerSet } from "@/lib/stellar/
 import { executeDemolition } from "@/lib/stellar/execute"
 import { isValidPublicKey, isValidDestination } from "@/lib/stellar/analysis"
 import { NATIVE_ASSET } from "@/lib/stellar/network"
+import { buildMockAudit, buildMockPlan, buildMockSteps, runMockExecution } from "@/lib/stellar/mock"
 import type {
   AccountAudit,
   DemolitionConfig,
@@ -43,7 +44,8 @@ const DEFAULT_CONFIG: Omit<DemolitionConfig, "publicKey" | "network"> = {
   withdrawPools: true,
 }
 
-export function useDemolisher() {
+export function useDemolisher(options?: { simulate?: boolean }) {
+  const simulate = options?.simulate ?? false
   const [network, setNetwork] = useState<NetworkId>("testnet")
   const [publicKey, setPublicKey] = useState("")
   const [stage, setStage] = useState<WizardStage>("connect")
@@ -83,6 +85,20 @@ export function useDemolisher() {
   const runAudit = useCallback(
     async (pk?: string) => {
       const target = (pk ?? publicKey).trim()
+
+      if (simulate) {
+        // No Horizon call — fabricate a believable account to rehearse with.
+        setError(null)
+        setLoading(true)
+        await new Promise((r) => setTimeout(r, 650))
+        const result = buildMockAudit(target, network)
+        setAudit(result)
+        setPublicKey(result.publicKey)
+        setStage("audit")
+        setLoading(false)
+        return
+      }
+
       if (!isValidPublicKey(target)) {
         setError("Enter a valid Stellar public key (starts with G).")
         return
@@ -101,12 +117,30 @@ export function useDemolisher() {
         setLoading(false)
       }
     },
-    [publicKey, network],
+    [publicKey, network, simulate],
   )
 
   // ---- Build the dry-run plan ----
   const buildPlan = useCallback(async () => {
     if (!audit) return
+
+    if (simulate) {
+      if (!config.destinationAddress.trim()) {
+        setError("Enter a destination address for the final merge (any value works in the simulation).")
+        return
+      }
+      setError(null)
+      setLoading(true)
+      await new Promise((r) => setTimeout(r, 600))
+      const fullConfig: DemolitionConfig = { ...config, publicKey: audit.publicKey, network }
+      const built = buildMockPlan(audit, fullConfig)
+      setPlan(built)
+      setBatches([])
+      setStage("preview")
+      setLoading(false)
+      return
+    }
+
     if (!isValidDestination(config.destinationAddress)) {
       setError("Enter a valid destination address for the final merge.")
       return
@@ -128,12 +162,30 @@ export function useDemolisher() {
     } finally {
       setLoading(false)
     }
-  }, [audit, config, network])
+  }, [audit, config, network, simulate])
 
   // ---- Execute the plan ----
   const execute = useCallback(async () => {
     if (!audit || !plan) return
     setError(null)
+
+    if (simulate) {
+      // No signing, no submission — animate a believable run.
+      setStage("execute")
+      setLoading(true)
+      const initialSteps = buildMockSteps(plan)
+      setSteps(initialSteps)
+      const result = await runMockExecution(
+        initialSteps,
+        config.destinationAddress,
+        (step) => setSteps((prev) => prev.map((s) => (s.id === step.id ? step : s))),
+      )
+      setSuccess(result.success)
+      setRecoveredTo(result.recoveredTo)
+      setLoading(false)
+      setStage("result")
+      return
+    }
 
     let signers: SignerSet
     try {
@@ -185,7 +237,7 @@ export function useDemolisher() {
       setLoading(false)
       setStage("result")
     }
-  }, [audit, plan, batches, config, network, secretKeys])
+  }, [audit, plan, batches, config, network, secretKeys, simulate])
 
   const multisigWeight = useMemo(() => {
     if (!audit) return 0

@@ -1,14 +1,72 @@
 "use client"
 
 import { useState } from "react"
-import { Skull, FlaskConical, ShieldCheck, Radio } from "lucide-react"
+import { Skull, FlaskConical, ShieldCheck, Radio, Wrench, AlertTriangle } from "lucide-react"
 import { LiveWizard } from "@/components/demolish/live-wizard"
 import { DemoModeSimulation } from "@/components/demolish/demo-mode"
 import { DemolishFaq } from "@/components/demolish/demolish-faq"
 import { ThemeToggle } from "@/components/theme-toggle"
 
+type ToolMode = "live" | "demo" | "toolkit"
+
+const MODE_META: Record<
+  ToolMode,
+  {
+    label: string
+    description: string
+    badge: string
+    /** classes for the status bar + framing accent */
+    iconWrap: string
+    icon: string
+    statusBar: string
+    badgeClass: string
+    frame: string
+    banner: { wrap: string; text: string } | null
+  }
+> = {
+  live: {
+    label: "Live Mode",
+    description: "Signs and submits real transactions on Stellar",
+    badge: "LIVE",
+    iconWrap: "bg-destructive/15 ring-1 ring-destructive/40",
+    icon: "text-destructive",
+    statusBar: "border-destructive/40 bg-destructive/5",
+    badgeClass: "bg-destructive text-destructive-foreground",
+    frame: "rounded-xl border-2 border-destructive/50 bg-destructive/[0.03] p-4 shadow-[0_0_0_1px_hsl(var(--destructive)/0.1)] sm:p-6",
+    banner: {
+      wrap: "border-destructive/40 bg-destructive/10",
+      text: "Live mode — real keys sign real transactions and funds move irreversibly on Stellar.",
+    },
+  },
+  demo: {
+    label: "Demo Mode",
+    description: "The real flow with fabricated data — nothing is broadcast",
+    badge: "DEMO",
+    iconWrap: "bg-muted ring-1 ring-border",
+    icon: "text-muted-foreground",
+    statusBar: "border-border bg-muted/40",
+    badgeClass: "bg-muted-foreground/15 text-muted-foreground",
+    frame: "rounded-xl border-2 border-dashed border-border bg-muted/20 p-4 sm:p-6",
+    banner: {
+      wrap: "border-border bg-muted/40",
+      text: "Demo mode — fabricated data, no Horizon reads, no signing, nothing broadcast.",
+    },
+  },
+  toolkit: {
+    label: "Toolkit",
+    description: "Sandbox scenarios and a read-only account explorer",
+    badge: "TOOLKIT",
+    iconWrap: "bg-muted ring-1 ring-border",
+    icon: "text-muted-foreground",
+    statusBar: "border-border bg-muted/40",
+    badgeClass: "bg-muted-foreground/15 text-muted-foreground",
+    frame: "",
+    banner: null,
+  },
+}
+
 export function BlackholeTool() {
-  const [demoMode, setDemoMode] = useState(false)
+  const [mode, setMode] = useState<ToolMode>("live")
 
   return (
     <main className="demolish-theme relative min-h-screen overflow-hidden bg-background">
@@ -63,24 +121,31 @@ export function BlackholeTool() {
             </span>
           </div>
 
-          <div className="flex flex-col gap-3 rounded-xl border bg-card p-3 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div
+            className={`flex flex-col gap-3 rounded-xl border p-3 shadow-sm transition-colors sm:flex-row sm:items-center sm:justify-between ${MODE_META[mode].statusBar}`}
+          >
             <div className="flex items-center gap-2.5">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted">
-                {demoMode ? (
-                  <FlaskConical className="h-4 w-4 text-muted-foreground" />
+              <div
+                className={`flex h-8 w-8 items-center justify-center rounded-lg ${MODE_META[mode].iconWrap}`}
+              >
+                {mode === "live" ? (
+                  <Radio className={`h-4 w-4 ${MODE_META[mode].icon}`} />
+                ) : mode === "demo" ? (
+                  <FlaskConical className={`h-4 w-4 ${MODE_META[mode].icon}`} />
                 ) : (
-                  <Radio className="h-4 w-4 text-primary" />
+                  <Wrench className={`h-4 w-4 ${MODE_META[mode].icon}`} />
                 )}
               </div>
               <div className="flex flex-col">
-                <span className="text-sm font-medium leading-tight">
-                  {demoMode ? "Demo Mode" : "Live Mode"}
-                </span>
-                <span className="text-xs text-muted-foreground">
-                  {demoMode
-                    ? "Simulated walkthrough — no real network calls"
-                    : "Signs and submits real transactions on Stellar"}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium leading-tight">{MODE_META[mode].label}</span>
+                  <span
+                    className={`inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-bold uppercase leading-none tracking-wider ${MODE_META[mode].badgeClass}`}
+                  >
+                    {MODE_META[mode].badge}
+                  </span>
+                </div>
+                <span className="text-xs text-muted-foreground">{MODE_META[mode].description}</span>
               </div>
             </div>
 
@@ -89,37 +154,55 @@ export function BlackholeTool() {
               aria-label="Tool mode"
               className="inline-flex shrink-0 rounded-lg border bg-muted/50 p-0.5 text-xs font-medium"
             >
-              <button
-                type="button"
-                role="tab"
-                aria-selected={!demoMode}
-                onClick={() => setDemoMode(false)}
-                className={`rounded-md px-4 py-1.5 transition-colors ${
-                  !demoMode
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                Live
-              </button>
-              <button
-                type="button"
-                role="tab"
-                aria-selected={demoMode}
-                onClick={() => setDemoMode(true)}
-                className={`rounded-md px-4 py-1.5 transition-colors ${
-                  demoMode
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                Demo
-              </button>
+              {(["live", "demo", "toolkit"] as ToolMode[]).map((m) => {
+                const selectedClass =
+                  m === "live"
+                    ? "bg-destructive text-destructive-foreground shadow-sm"
+                    : "bg-foreground text-background shadow-sm"
+                return (
+                  <button
+                    key={m}
+                    type="button"
+                    role="tab"
+                    aria-selected={mode === m}
+                    onClick={() => setMode(m)}
+                    className={`rounded-md px-4 py-1.5 capitalize transition-colors ${
+                      mode === m ? selectedClass : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {m}
+                  </button>
+                )
+              })}
             </div>
           </div>
         </header>
 
-        {demoMode ? <DemoModeSimulation /> : <LiveWizard />}
+        {mode === "toolkit" ? (
+          <DemoModeSimulation />
+        ) : (
+          <div className={MODE_META[mode].frame}>
+            {MODE_META[mode].banner && (
+              <div
+                className={`mb-4 flex items-center gap-2.5 rounded-lg border px-3 py-2.5 ${MODE_META[mode].banner!.wrap}`}
+              >
+                {mode === "live" ? (
+                  <AlertTriangle className="h-4 w-4 shrink-0 text-destructive" />
+                ) : (
+                  <FlaskConical className="h-4 w-4 shrink-0 text-muted-foreground" />
+                )}
+                <p
+                  className={`text-xs font-medium text-pretty ${
+                    mode === "live" ? "text-destructive" : "text-muted-foreground"
+                  }`}
+                >
+                  {MODE_META[mode].banner!.text}
+                </p>
+              </div>
+            )}
+            <LiveWizard simulate={mode === "demo"} />
+          </div>
+        )}
 
         <DemolishFaq />
       </div>
