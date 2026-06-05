@@ -182,9 +182,11 @@ export default function ArchitecturePage() {
               <CodeBlock>
                 {`app/page.tsx                   UI route (wizard + SEO/JSON-LD)
 components/demolish/
+  blackhole-tool.tsx           Mode shell: Live · Simulate · Toolkit
   use-demolisher.ts            React state machine orchestrating the 6 stages
   live-wizard.tsx              Stage rendering, confirmation gating
   audit/configure/preview/…    Per-stage panels
+  demo-mode.tsx                Toolkit: read-only live account explorer
 lib/stellar/                   Pure engine (no React)
   network.ts                   Network configs, explorer URLs, asset helpers
   types.ts                     Domain model (AccountAudit, Plan, Config, …)
@@ -202,6 +204,29 @@ lib/stellar/                   Pure engine (no React)
                 decision to the engine. Secret keys are held in React state only for the signing step and cleared on{" "}
                 <Code>reset()</Code>.
               </p>
+
+              <SubHeading icon={Workflow}>4.1 Operating modes</SubHeading>
+              <p>
+                The shell (<Code>blackhole-tool.tsx</Code>) exposes three modes over the same engine. Critically, all
+                three read the <Em>real</Em> account from Horizon — none fabricate balances:
+              </p>
+              <ul className="space-y-3">
+                <Bullet term="Live">
+                  The full six-stage pipeline. The only mode that requests a secret key, signs, and broadcasts
+                  transactions to reclaim reserves.
+                </Bullet>
+                <Bullet term="Simulate">
+                  Identical to Live for every read-only step — it loads the real audit and builds the real plan from
+                  live balances — but the destructive execution is rehearsed in memory. No secret key is ever
+                  requested, nothing is signed, and nothing is broadcast.
+                </Bullet>
+                <Bullet term="Toolkit">
+                  A read-only account explorer (<Code>demo-mode.tsx</Code>) that runs the same{" "}
+                  <Code>loadAccountAudit()</Code> and renders real balances, liquidity pools, claimable balances, and
+                  keyless Soroban discovery for inspection. An opt-in sandbox with scripted scenarios remains available
+                  purely for teaching the edge cases.
+                </Bullet>
+              </ul>
             </Section>
 
             <Section id="pipeline" icon={Workflow} title="5. Execution pipeline">
