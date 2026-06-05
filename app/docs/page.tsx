@@ -188,9 +188,11 @@ components/demolish/
 lib/stellar/                   Pure engine (no React)
   network.ts                   Network configs, explorer URLs, asset helpers
   types.ts                     Domain model (AccountAudit, Plan, Config, …)
-  account.ts                   Horizon audit loader
+  account.ts                   Horizon audit loader + Soroban discovery
   analysis.ts                  StrKey validation, blockers, warnings
   routing.ts                   SDEX/AMM strict-send path quoting
+  soroban.ts                   Keyless contract discovery + RPC token reads
+  defiAdapters.ts              Pluggable protocol-position adapter registry
   plan.ts                      Demolition unit builder + tx batching
   signing.ts                   In-memory keypair signing + multisig weight
   execute.ts                   Sequential submit, fail-safe, result codes`}
@@ -243,9 +245,10 @@ lib/stellar/                   Pure engine (no React)
               <CodeBlock>{`minBalance = (2 + subentryCount + numSponsoring − numSponsored) × 0.5 XLM`}</CodeBlock>
               <p>
                 The loader also summarizes claimable-balance predicates into a human-readable form and a best-effort
-                &quot;claimable now&quot; boolean, and flags multisig and disabled-master-key configurations. Soroban
-                token / DeFi detection is modelled in the type system and layered in separately; in this phase those
-                arrays are surfaced for review rather than auto-liquidated.
+                &quot;claimable now&quot; boolean, and flags multisig and disabled-master-key configurations. After the
+                classic graph is reconstructed, it invokes the keyless Soroban discovery layer (§6.4) as a best-effort
+                step — failures there are swallowed so they can never block or invalidate the classic audit. Discovered
+                Soroban tokens and DeFi positions are surfaced for review rather than auto-liquidated in this phase.
               </p>
 
               <SubHeading icon={CircleAlert}>6.2 Analysis (analysis.ts)</SubHeading>
@@ -266,7 +269,35 @@ lib/stellar/                   Pure engine (no React)
                 forcing an unsafe operation.
               </p>
 
-              <SubHeading icon={Layers}>6.4 Planning (plan.ts)</SubHeading>
+              <SubHeading icon={Boxes}>6.4 Soroban discovery (soroban.ts, defiAdapters.ts)</SubHeading>
+              <p>
+                Classic Horizon cannot enumerate which Soroban contracts an account has interacted with, and commercial
+                indexers (OctoPos, Orion) gate their APIs behind requested keys. BlackHole instead reconstructs this
+                itself, fully <Em>keyless</Em>, in two stages:
+              </p>
+              <ol className="space-y-4">
+                <Step n={1} title="Discover">
+                  <Code>discoverInvokedContracts()</Code> pages the account&apos;s{" "}
+                  <Code>invoke_host_function</Code> operation history on public Horizon and extracts every contract
+                  address referenced — both from the operation <Code>parameters</Code> (decoded <Code>ScVal</Code>{" "}
+                  addresses) and from the <Code>asset_balance_changes</Code> ledger effects.
+                </Step>
+                <Step n={2} title="Read">
+                  Each candidate (capped at <Code>40</Code>, deduped, user-pasted ids first) is probed via the public
+                  Soroban RPC with batched, bounded-concurrency <Code>simulateTransaction</Code> calls to a token
+                  contract&apos;s <Code>balance</Code>, <Code>symbol</Code>, <Code>name</Code>, and{" "}
+                  <Code>decimals</Code>. Non-zero balances become <Code>SorobanTokenBalance</Code>s, labelled against a
+                  small registry of verified mainnet addresses (Soroswap, Aquarius, the native SAC) when matched.
+                </Step>
+              </ol>
+              <p>
+                A pluggable <Code>defiAdapters</Code> registry layers protocol-specific position reads on top of the raw
+                token scan, so deeper unwinding logic (e.g. Blend, Soroswap LP) can be added per protocol without
+                touching the discovery core. Every contract that is discovered but not recognized is still surfaced as a
+                token rather than mislabeled.
+              </p>
+
+              <SubHeading icon={Layers}>6.5 Planning (plan.ts)</SubHeading>
               <p>
                 The planner emits an ordered list of <Code>DemolitionUnit</Code>s, each pairing a preview description
                 with the concrete <Code>xdr.Operation[]</Code> that will be signed. The canonical order respects every
@@ -287,7 +318,7 @@ lib/stellar/                   Pure engine (no React)
                 spendable balance plus the sum of reserves reclaimed by each unit.
               </p>
 
-              <SubHeading icon={KeyRound}>6.5 Signing (signing.ts)</SubHeading>
+              <SubHeading icon={KeyRound}>6.6 Signing (signing.ts)</SubHeading>
               <p>
                 <Code>createSignerSet()</Code> validates raw secret seeds and converts them into in-memory{" "}
                 <Code>Keypair</Code> objects. An optional external signer interface allows a connected wallet to return a
@@ -296,7 +327,7 @@ lib/stellar/                   Pure engine (no React)
                 list so the UI can block execution early when a multisig high threshold cannot be met.
               </p>
 
-              <SubHeading icon={Workflow}>6.6 Execution (execute.ts)</SubHeading>
+              <SubHeading icon={Workflow}>6.7 Execution (execute.ts)</SubHeading>
               <p>
                 Each transaction is rebuilt from a freshly loaded sequence number, signed in memory, and submitted to
                 Horizon with a fee of <Code>0.001 XLM</Code> per operation and a 180-second timeout. If any submission
@@ -372,7 +403,7 @@ lib/stellar/                   Pure engine (no React)
                 <table className="w-full text-left text-sm">
                   <tbody className="divide-y divide-border">
                     <Row k="Framework" v="Next.js 16 (App Router) · React 19 · TypeScript" />
-                    <Row k="Stellar" v="@stellar/stellar-sdk 15 · Horizon REST · SDEX/AMM path-finding" />
+                    <Row k="Stellar" v="@stellar/stellar-sdk 15 · Horizon REST · Soroban RPC · SDEX/AMM path-finding" />
                     <Row k="Wallets" v="@creit.tech/stellar-wallets-kit (optional external signing)" />
                     <Row k="UI" v="Tailwind CSS · shadcn/ui · lucide-react · scoped supernova theme" />
                     <Row k="Assistant" v="Vercel AI SDK 6 (in-app support agent)" />
@@ -385,10 +416,12 @@ lib/stellar/                   Pure engine (no React)
             <Section id="roadmap" icon={MapIcon} title="11. Roadmap">
               <ul className="space-y-3">
                 <Bullet term="Soroban liquidation">
-                  Promote Soroban token detection into automated liquidation via protocol adapters before merge.
+                  Keyless Soroban token and DeFi discovery is live (§6.4); the next step is promoting detected balances
+                  into automated liquidation and unwinding before merge.
                 </Bullet>
-                <Bullet term="DeFi position adapters">
-                  Pluggable adapters to unwind detected DeFi positions in their source protocols.
+                <Bullet term="Expanded protocol registry">
+                  Grow the verified-address registry and per-protocol <Code>defiAdapters</Code> beyond Soroswap and
+                  Aquarius to deeply read and unwind Blend, Phoenix, and other Soroban positions.
                 </Bullet>
                 <Bullet term="Batch / portfolio mode">
                   Audit and demolish multiple accounts in one guided session.
