@@ -32,6 +32,8 @@ import {
   AlertCircle
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
+import { loadAccountAudit } from "@/lib/stellar/account";
+import type { AccountAudit, NetworkId } from "@/lib/stellar/types";
 
 // --- Types & Schema Definition ---
 interface Trustline {
@@ -105,6 +107,115 @@ interface AccountState {
   sorobanPositions: SorobanDeFi[];
   allowances: TokenAllowance[];
   claimableBalances: { id: string; assetCode: string; amount: string; sponsor: string }[];
+}
+
+// A neutral, zeroed account used before any real lookup happens in live mode —
+// so the explorer never shows fabricated numbers on first paint.
+const EMPTY_ACCOUNT: AccountState = {
+  accountId: "",
+  xlmBalance: 0,
+  baseReserves: 0,
+  sponsoredReserves: 0,
+  numSponsoring: 0,
+  numSponsored: 0,
+  trustlines: [],
+  dataEntries: [],
+  signers: [],
+  thresholdLow: 0,
+  thresholdMed: 0,
+  thresholdHigh: 0,
+  dexOffers: [],
+  ammPositions: [],
+  sorobanPositions: [],
+  allowances: [],
+  claimableBalances: [],
+};
+
+// Map the canonical AccountAudit (real Horizon + keyless Soroban discovery)
+// onto this component's AccountState. Everything here is real on-chain data —
+// no placeholders or heuristics are injected.
+function mapAuditToAccountState(audit: AccountAudit): AccountState {
+  const trustlines: Trustline[] = audit.balances
+    .filter((b) => !b.asset.isNative)
+    .map((b) => ({
+      assetCode: b.asset.code,
+      assetIssuer: b.asset.issuer ?? "",
+      balance: b.balance,
+      limit: b.limit ?? "0",
+    }));
+
+  const ammPositions: AmmPosition[] = audit.liquidityPools.map((p) => {
+    const a = p.reserves[0];
+    const b = p.reserves[1];
+    const nativeReserve = p.reserves.find((r) => r.asset.isNative);
+    return {
+      poolId: p.poolId,
+      assetA: a?.asset.code ?? "?",
+      assetB: b?.asset.code ?? "?",
+      shares: p.shares,
+      xlmValue: nativeReserve ? nativeReserve.amount : "—",
+      tokenAValue: a ? `${a.amount} ${a.asset.code}` : "—",
+      tokenBValue: b ? `${b.amount} ${b.asset.code}` : "—",
+    };
+  });
+
+  const sorobanPositions: SorobanDeFi[] = [
+    ...audit.defiPositions.map((d) => ({
+      protocol: d.protocol as SorobanDeFi["protocol"],
+      type: (d.kind as SorobanDeFi["type"]) ?? "Lending",
+      symbol: d.summary,
+      supplied: "—",
+      borrowed: "—",
+      rewardEarned: "—",
+      collateralized: false,
+    })),
+    ...audit.sorobanTokens.map((t) => ({
+      protocol: (t.protocolLabel ?? "Soroban") as SorobanDeFi["protocol"],
+      type: "Liquidity Pool" as SorobanDeFi["type"],
+      symbol: t.symbol ?? t.name ?? `${t.contractId.slice(0, 4)}…${t.contractId.slice(-4)}`,
+      supplied: t.displayBalance,
+      borrowed: "0",
+      rewardEarned: "—",
+      collateralized: false,
+    })),
+  ];
+
+  const allowances: TokenAllowance[] = audit.sorobanAllowances.map((a) => ({
+    tokenCode: a.symbol ?? `${a.contractId.slice(0, 4)}…`,
+    spender: a.spender,
+    amount: a.amount,
+  }));
+
+  return {
+    accountId: audit.publicKey,
+    xlmBalance: parseFloat(audit.nativeBalance) || 0,
+    baseReserves: parseFloat(audit.minBalance) || 0,
+    sponsoredReserves: audit.sponsorship.numSponsored * 0.5,
+    numSponsoring: audit.sponsorship.numSponsoring,
+    numSponsored: audit.sponsorship.numSponsored,
+    trustlines,
+    dataEntries: audit.dataEntries.map((d) => ({ key: d.name, value: d.value })),
+    signers: audit.signers.map((s) => ({ key: s.key, weight: s.weight, type: s.type })),
+    thresholdLow: audit.thresholds.low,
+    thresholdMed: audit.thresholds.med,
+    thresholdHigh: audit.thresholds.high,
+    dexOffers: audit.openOffers.map((o) => ({
+      id: o.id,
+      sellingCode: o.selling.code,
+      buyingCode: o.buying.code,
+      amount: o.amount,
+      price: o.price,
+    })),
+    ammPositions,
+    sorobanPositions,
+    allowances,
+    claimableBalances: audit.claimableBalances.map((c) => ({
+      id: c.id,
+      assetCode: c.asset.code,
+      amount: c.amount,
+      sponsor: c.claimableNow ? "Claimable now" : c.predicateSummary || "—",
+    })),
+  };
 }
 
 export function DemoModeSimulation() {
@@ -237,13 +348,14 @@ export function DemoModeSimulation() {
 
   // --- Core Application States ---
   const [selectedScenarioKey, setSelectedScenarioKey] = useState<string>("trader");
-  const [explorerMode, setExplorerMode] = useState<"sandbox" | "live">("sandbox");
+  const [explorerMode, setExplorerMode] = useState<"sandbox" | "live">("live");
   const [liveAddressInput, setLiveAddressInput] = useState<string>("");
   const [liveNetwork, setLiveNetwork] = useState<"testnet" | "mainnet">("testnet");
   const [activeTab, setActiveTab] = useState<"balances" | "defi" | "claims" | "access">("balances");
   
-  // Custom interactive simulation state (cloned from scenarios)
-  const [account, setAccount] = useState<AccountState>(scenarios.trader);
+  // Starts empty — the live Account Explorer fills this with REAL on-chain data
+  // on lookup; sandbox scenarios overwrite it only when explicitly selected.
+  const [account, setAccount] = useState<AccountState>(EMPTY_ACCOUNT);
   const [isLoadingLive, setIsLoadingLive] = useState<boolean>(false);
   const [liveError, setLiveError] = useState<string | null>(null);
 
@@ -376,131 +488,20 @@ export function DemoModeSimulation() {
     setAiAuditReport(null);
     setCosignedKeys([]);
 
-    const baseUrl = liveNetwork === "mainnet" 
-      ? "https://horizon.stellar.org" 
-      : "https://horizon-testnet.stellar.org";
-
     try {
-      // 1. Fetch live account core parameters
-      const accountRes = await fetch(`${baseUrl}/accounts/${liveAddressInput}`);
-      if (!accountRes.ok) {
-        throw new Error(accountRes.status === 404 
-          ? "Account ID not found on Stellar Ledger. Make sure it is funded!" 
-          : "Stellar Horizon API Error!"
-        );
-      }
-      const accountData = await accountRes.json();
-
-      // 2. Fetch live offers
-      let offers: DexOffer[] = [];
-      try {
-        const offersRes = await fetch(`${baseUrl}/accounts/${liveAddressInput}/offers?limit=50`);
-        if (offersRes.ok) {
-          const offersData = await offersRes.json();
-          offers = offersData._embedded?.records.map((r: any) => ({
-            id: r.id,
-            sellingCode: r.selling.asset_code || "XLM",
-            buyingCode: r.buying.asset_code || "XLM",
-            amount: r.amount,
-            price: r.price
-          })) || [];
-        }
-      } catch (err) {
-        console.warn("Failed fetching offers", err);
-      }
-
-      // 3. Fetch live claimable balances
-      let claimableBalances: any[] = [];
-      try {
-        const ciaimRes = await fetch(`${baseUrl}/claimable_balances?claimant=${liveAddressInput}`);
-        if (ciaimRes.ok) {
-          const claimData = await ciaimRes.ok ? await ciaimRes.json() : null;
-          claimableBalances = claimData?._embedded?.records.map((r: any) => ({
-            id: r.id,
-            assetCode: r.asset.split(":")[0] === "native" ? "XLM" : r.asset.split(":")[0],
-            amount: r.amount,
-            sponsor: r.sponsor || "Unknown"
-          })) || [];
-        }
-      } catch (err) {
-         console.warn("Failed fetching claimable balances", err);
-      }
-
-      // Map Horizon format to our AccountState schema
-      const mappedTrustlines: Trustline[] = [];
-      let nativeBal = 0;
-
-      if (accountData.balances) {
-        accountData.balances.forEach((b: any) => {
-          if (b.asset_type === "native") {
-            nativeBal = parseFloat(b.balance);
-          } else {
-            mappedTrustlines.push({
-              assetCode: b.asset_code || "UNKNOWN",
-              assetIssuer: b.asset_issuer || "",
-              balance: b.balance,
-              limit: b.limit || "0"
-            });
-          }
-        });
-      }
-
-      const mappedSigners: Signer[] = accountData.signers?.map((s: any) => ({
-        key: s.key,
-        weight: s.weight,
-        type: s.type
-      })) || [];
-
-      const dataEntriesArray: DataEntry[] = [];
-      if (accountData.data) {
-        Object.entries(accountData.data).forEach(([k, v]) => {
-          // Horizon values are base64 encoded strings
-          try {
-            dataEntriesArray.push({
-              key: k,
-              value: atob(v as string)
-            });
-          } catch {
-            dataEntriesArray.push({
-              key: k,
-              value: String(v)
-            });
-          }
-        });
-      }
-
-      const sponsoredReserves = (accountData.num_sponsored || 0) * 0.5;
-      const baseReserveAmount = 1.0 + (mappedTrustlines.length * 0.5) + (dataEntriesArray.length * 0.5) + ((mappedSigners.length - 1) * 0.5) + (offers.length * 0.5);
-
-      const parsedAccountState: AccountState = {
-        accountId: liveAddressInput,
-        xlmBalance: nativeBal,
-        baseReserves: baseReserveAmount,
-        sponsoredReserves: sponsoredReserves,
-        numSponsoring: accountData.num_sponsoring || 0,
-        numSponsored: accountData.num_sponsored || 0,
-        trustlines: mappedTrustlines,
-        dataEntries: dataEntriesArray,
-        signers: mappedSigners,
-        thresholdLow: accountData.thresholds?.low_threshold ?? 1,
-        thresholdMed: accountData.thresholds?.med_threshold ?? 1,
-        thresholdHigh: accountData.thresholds?.high_threshold ?? 1,
-        dexOffers: offers,
-        // Since AMM tracking is deep, sandbox is ideal, but we can reflect a mock AMM if they have pool tokens in trustlines
-        ammPositions: mappedTrustlines.some(t => t.assetCode.includes("LP")) ? [
-          { poolId: "custom_pool_01", assetA: "XLM", assetB: "Token", shares: "1.0", xlmValue: "5.0", tokenAValue: "2.5 XLM", tokenBValue: "5.0 Token" }
-        ] : [],
-        // Soroban positions fetched dynamically in live is hard, so we provide an authentic mock placeholder if the trustlines look DeFi active
-        sorobanPositions: mappedTrustlines.length > 2 ? [
-          { protocol: "Blend", type: "Lending", symbol: "USDC", supplied: "250.00", borrowed: "0.00", rewardEarned: "1.50 BLND", collateralized: true }
-        ] : [],
-        allowances: [],
-        claimableBalances: claimableBalances
-      };
-
-      setAccount(parsedAccountState);
+      // Read the REAL account with the same canonical engine the Live/Demo
+      // wizard uses: real balances, liquidity pools, claimable balances, and
+      // keyless Soroban discovery. No fabricated positions are injected.
+      const network: NetworkId = liveNetwork === "mainnet" ? "public" : "testnet";
+      const audit = await loadAccountAudit(liveAddressInput.trim(), network);
+      setAccount(mapAuditToAccountState(audit));
     } catch (err: any) {
-      setLiveError(err?.message || "An unexpected error occurred while communicating with Stellar Horizon node.");
+      const msg = err?.message ?? "";
+      setLiveError(
+        /not found|404/i.test(msg)
+          ? "Account ID not found on Stellar Ledger. Make sure it is funded!"
+          : msg || "An unexpected error occurred while communicating with Stellar Horizon node.",
+      );
     } finally {
       setIsLoadingLive(false);
     }
