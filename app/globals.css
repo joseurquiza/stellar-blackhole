@@ -164,6 +164,20 @@
   }
 }
 
+@layer base {
+  /* WCAG 2.4.7 Focus Visible: many surfaces (notably the BlackHole toolkit)
+     use raw <button>/<a> elements with only hover styling. Guarantee a clear
+     keyboard focus indicator for every interactive element in the scoped
+     themes. shadcn components keep their own focus-visible rings; this adds a
+     complementary outline that never relies on color alone. */
+  .demolish-theme :is(button, a, input, select, textarea, [role="tab"], [role="button"], [tabindex]):focus-visible,
+  .agent-theme :is(button, a, input, select, textarea, [role="tab"], [role="button"], [tabindex]):focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: 0.375rem;
+  }
+}
+
 @layer components {
   .animate-tilt {
     animation: tilt 10s infinite linear;

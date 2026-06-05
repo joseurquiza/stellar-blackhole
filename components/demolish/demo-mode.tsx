@@ -1247,7 +1247,7 @@ export function DemoModeSimulation() {
             
             {/* Header Tabs Navigation */}
             <div className="bg-muted/60 p-2 border-b border-border flex justify-between items-center flex-wrap gap-2">
-              <div className="flex gap-1">
+              <div className="flex gap-1 overflow-x-auto max-w-full -mx-1 px-1 [&>button]:shrink-0 [&>button]:whitespace-nowrap">
                 <button 
                   onClick={() => setActiveTab("balances")}
                   className={`text-xs px-3 py-2 rounded-xl transition ${activeTab === "balances" ? "bg-amber-500 text-black font-semibold" : "text-muted-foreground hover:text-foreground hover:bg-secondary"}`}

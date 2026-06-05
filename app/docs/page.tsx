@@ -483,7 +483,7 @@ function SubHeading({ icon: Icon, children }: { icon: React.ComponentType<{ clas
 
 function Code({ children }: { children: React.ReactNode }) {
   return (
-    <code className="rounded bg-secondary px-1.5 py-0.5 font-mono text-[0.85em] text-foreground">{children}</code>
+    <code className="rounded bg-secondary px-1.5 py-0.5 font-mono text-[0.85em] text-foreground break-words">{children}</code>
   )
 }
 
@@ -526,10 +526,10 @@ function Step({ n, title, children }: { n: number; title: string; children: Reac
 function Row({ k, v }: { k: string; v: string }) {
   return (
     <tr>
-      <th scope="row" className="w-40 bg-card px-4 py-3 align-top font-medium text-foreground">
+      <th scope="row" className="w-28 bg-card px-4 py-3 align-top font-medium text-foreground sm:w-40">
         {k}
       </th>
-      <td className="px-4 py-3 text-muted-foreground">{v}</td>
+      <td className="px-4 py-3 text-muted-foreground break-words">{v}</td>
     </tr>
   )
 }

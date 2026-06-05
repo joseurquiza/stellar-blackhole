@@ -372,6 +372,7 @@ function NetworkButton({
     <button
       type="button"
       onClick={onClick}
+      aria-pressed={active}
       className={`rounded-lg border p-3 text-left transition-colors ${
         active ? "border-primary bg-primary/5" : "hover:bg-muted/50"
       }`}
