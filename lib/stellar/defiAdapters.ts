@@ -6,6 +6,13 @@ import type { AccountAudit, DefiPosition, NetworkId } from "./types"
  * `closeable: false` until an adapter is verified against real funds, so the
  * UI surfaces positions for manual action without ever risking irreversible
  * automated calls that could not be safely tested.
+ *
+ * NOTE: generic, token-balance-shaped positions (LP shares, vault share
+ * tokens, SAC balances) are already discovered keylessly by
+ * `discoverAccountPositions()` in soroban.ts. Adapters here are reserved for
+ * DEEP, protocol-specific reads that are NOT representable as a token balance
+ * — e.g. Blend lending positions stored in the pool contract's per-user
+ * storage, which require the protocol's ABI to read.
  */
 export interface DefiAdapter {
   protocol: string
@@ -14,16 +21,15 @@ export interface DefiAdapter {
 }
 
 /**
- * Registry of adapters. New protocols (Blend, Aquarius, Soroswap, ...) are
- * added here. Each adapter is responsible for its own contract specifics.
+ * Registry of deep protocol adapters. Empty until an adapter is verified
+ * against real contracts; this never blocks discovery, which runs separately.
  */
 const ADAPTERS: DefiAdapter[] = [
-  // new BlendAdapter(),
-  // new AquariusAdapter(),
-  // new SoroswapAdapter(),
+  // new BlendAdapter(),   // pool.get_positions(user) — needs verified pool ids
+  // new PhoenixAdapter(), // stake/farm positions
 ]
 
-/** Run every registered adapter and aggregate detected positions. */
+/** Run every registered deep adapter and aggregate detected positions. */
 export async function detectAllDefiPositions(
   network: NetworkId,
   audit: AccountAudit,

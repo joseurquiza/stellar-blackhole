@@ -93,9 +93,12 @@ export interface SponsorshipInfo {
 export interface SorobanTokenBalance {
   contractId: string
   symbol?: string
+  name?: string
   decimals?: number
   rawBalance: string
   displayBalance: string
+  // best-effort protocol label when the contract matches a known registry entry
+  protocolLabel?: string
 }
 
 export interface SorobanAllowance {
