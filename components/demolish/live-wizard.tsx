@@ -154,7 +154,7 @@ export function LiveWizard({ simulate = false }: { simulate?: boolean }) {
 
             <p className="text-xs text-muted-foreground">
               {simulate
-                ? "Paste the public key (starts with G) of the account you want to inspect. It's read live from Horizon — no secret key is ever needed in demo mode."
+                ? "Paste the public key (starts with G) of the account you want to inspect. It's read live from Horizon — no secret key is ever needed in simulate mode."
                 : "Paste the account's public key (starts with G). You'll provide the secret key only at the signing step, right before execution."}
             </p>
           </CardContent>

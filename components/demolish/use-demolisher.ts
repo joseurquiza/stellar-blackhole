@@ -86,8 +86,8 @@ export function useDemolisher(options?: { simulate?: boolean }) {
     async (pk?: string) => {
       const target = (pk ?? publicKey).trim()
 
-      // Demo mode reads the REAL account from Horizon — it only simulates the
-      // destructive execution later. So the audit path is identical to live.
+      // Simulate mode reads the REAL account from Horizon — it only simulates
+      // the destructive execution later. So the audit path is identical to live.
       if (!isValidPublicKey(target)) {
         setError("Enter a valid Stellar public key (starts with G).")
         return
@@ -113,7 +113,7 @@ export function useDemolisher(options?: { simulate?: boolean }) {
   const buildPlan = useCallback(async () => {
     if (!audit) return
 
-    // Demo mode builds the REAL plan from the REAL audit (planning + path
+    // Simulate mode builds the REAL plan from the REAL audit (planning + path
     // quoting are read-only; nothing is signed or broadcast here).
     if (!isValidDestination(config.destinationAddress)) {
       setError("Enter a valid destination address for the final merge.")
