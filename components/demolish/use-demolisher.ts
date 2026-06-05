@@ -7,7 +7,7 @@ import { createSignerSet, availableWeight, type SignerSet } from "@/lib/stellar/
 import { executeDemolition } from "@/lib/stellar/execute"
 import { isValidPublicKey, isValidDestination } from "@/lib/stellar/analysis"
 import { NATIVE_ASSET } from "@/lib/stellar/network"
-import { buildMockAudit, buildMockPlan, buildMockSteps, runMockExecution } from "@/lib/stellar/mock"
+import { buildMockSteps, runMockExecution } from "@/lib/stellar/mock"
 import type {
   AccountAudit,
   DemolitionConfig,
@@ -86,19 +86,8 @@ export function useDemolisher(options?: { simulate?: boolean }) {
     async (pk?: string) => {
       const target = (pk ?? publicKey).trim()
 
-      if (simulate) {
-        // No Horizon call — fabricate a believable account to rehearse with.
-        setError(null)
-        setLoading(true)
-        await new Promise((r) => setTimeout(r, 650))
-        const result = buildMockAudit(target, network)
-        setAudit(result)
-        setPublicKey(result.publicKey)
-        setStage("audit")
-        setLoading(false)
-        return
-      }
-
+      // Demo mode reads the REAL account from Horizon — it only simulates the
+      // destructive execution later. So the audit path is identical to live.
       if (!isValidPublicKey(target)) {
         setError("Enter a valid Stellar public key (starts with G).")
         return
@@ -124,23 +113,8 @@ export function useDemolisher(options?: { simulate?: boolean }) {
   const buildPlan = useCallback(async () => {
     if (!audit) return
 
-    if (simulate) {
-      if (!config.destinationAddress.trim()) {
-        setError("Enter a destination address for the final merge (any value works in the simulation).")
-        return
-      }
-      setError(null)
-      setLoading(true)
-      await new Promise((r) => setTimeout(r, 600))
-      const fullConfig: DemolitionConfig = { ...config, publicKey: audit.publicKey, network }
-      const built = buildMockPlan(audit, fullConfig)
-      setPlan(built)
-      setBatches([])
-      setStage("preview")
-      setLoading(false)
-      return
-    }
-
+    // Demo mode builds the REAL plan from the REAL audit (planning + path
+    // quoting are read-only; nothing is signed or broadcast here).
     if (!isValidDestination(config.destinationAddress)) {
       setError("Enter a valid destination address for the final merge.")
       return

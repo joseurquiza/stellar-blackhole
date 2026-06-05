@@ -63,9 +63,9 @@ export function LiveWizard({ simulate = false }: { simulate?: boolean }) {
         <div className="flex items-start gap-2.5 rounded-lg border border-primary/30 bg-primary/5 px-3 py-2.5 text-xs">
           <FlaskConical className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
           <p className="text-pretty text-muted-foreground">
-            <span className="font-medium text-foreground">Simulation.</span> This is the real demolition flow with
-            fabricated data. No account is read from Horizon, nothing is signed, and no transaction is broadcast.
-            Type anything to continue at each step.
+            <span className="font-medium text-foreground">Simulation.</span> This reads your real account from Horizon
+            and builds the real demolition plan from those live balances. Only the final step is simulated — no key is
+            ever requested, nothing is signed, and no transaction is broadcast.
           </p>
         </div>
       )}
@@ -145,7 +145,7 @@ export function LiveWizard({ simulate = false }: { simulate?: boolean }) {
                   onChange={(e) => setPubInput(e.target.value.trim())}
                   className="font-mono text-sm"
                 />
-                <Button onClick={() => d.runAudit(pubInput)} disabled={state.loading || (!pubInput && !simulate)}>
+                <Button onClick={() => d.runAudit(pubInput)} disabled={state.loading || !pubInput}>
                   {state.loading ? <Spinner className="h-4 w-4" /> : <Search className="h-4 w-4" />}
                   <span className="ml-1 hidden sm:inline">Audit</span>
                 </Button>
@@ -154,7 +154,7 @@ export function LiveWizard({ simulate = false }: { simulate?: boolean }) {
 
             <p className="text-xs text-muted-foreground">
               {simulate
-                ? "Paste any public key, or just press Audit to load a sample account. No real account is contacted."
+                ? "Paste the public key (starts with G) of the account you want to inspect. It's read live from Horizon — no secret key is ever needed in demo mode."
                 : "Paste the account's public key (starts with G). You'll provide the secret key only at the signing step, right before execution."}
             </p>
           </CardContent>

@@ -40,7 +40,7 @@ const MODE_META: Record<
   },
   demo: {
     label: "Demo Mode",
-    description: "The real flow with fabricated data — nothing is broadcast",
+    description: "Reads your real account, simulates the demolish — nothing signed or broadcast",
     badge: "DEMO",
     iconWrap: "bg-muted ring-1 ring-border",
     icon: "text-muted-foreground",
@@ -49,7 +49,7 @@ const MODE_META: Record<
     frame: "rounded-xl border-2 border-dashed border-border bg-muted/20 p-4 sm:p-6",
     banner: {
       wrap: "border-border bg-muted/40",
-      text: "Demo mode — fabricated data, no Horizon reads, no signing, nothing broadcast.",
+      text: "Demo mode — real account read live from Horizon; only the destructive execution is simulated, never signed or broadcast.",
     },
   },
   toolkit: {
