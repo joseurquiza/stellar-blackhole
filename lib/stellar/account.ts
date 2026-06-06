@@ -1,5 +1,7 @@
 import { Horizon } from "@stellar/stellar-sdk"
 import { getNetwork, makeAssetId, NATIVE_ASSET } from "./network"
+import { discoverAccountPositions } from "./soroban"
+import { detectAllDefiPositions } from "./defiAdapters"
 import type {
   AccountAudit,
   BalanceLine,
@@ -10,8 +12,6 @@ import type {
   OpenOffer,
   SignerInfo,
   SorobanAllowance,
-  SorobanTokenBalance,
-  DefiPosition,
 } from "./types"
 
 const BASE_RESERVE = 0.5
@@ -176,11 +176,9 @@ export async function loadAccountAudit(publicKey: string, network: NetworkId): P
     account.signers.filter((s) => s.weight > 0).length > 1 ||
     account.thresholds.high_threshold > masterWeight
 
-  const sorobanTokens: SorobanTokenBalance[] = []
   const sorobanAllowances: SorobanAllowance[] = []
-  const defiPositions: DefiPosition[] = []
 
-  return {
+  const audit: AccountAudit = {
     publicKey,
     network,
     exists: true,
@@ -201,12 +199,27 @@ export async function loadAccountAudit(publicKey: string, network: NetworkId): P
     },
     sponsorship: { numSponsoring, numSponsored },
     claimableBalances,
-    sorobanTokens,
+    sorobanTokens: [],
     sorobanAllowances,
-    defiPositions,
+    defiPositions: [],
     isMultisig,
     hasMasterKeyDisabled: masterWeight === 0,
   }
+
+  // Keyless Soroban discovery: enumerate contracts the account has touched via
+  // Horizon history, then read live balances/labels via the public RPC. This
+  // is best-effort and must never block the classic audit, so failures are
+  // swallowed and leave the arrays empty.
+  try {
+    const { tokens, positions } = await discoverAccountPositions(network, publicKey)
+    audit.sorobanTokens = tokens
+    const adapterPositions = await detectAllDefiPositions(network, audit)
+    audit.defiPositions = [...positions, ...adapterPositions]
+  } catch {
+    // discovery failed; classic audit remains fully valid
+  }
+
+  return audit
 }
 
 function emptyAudit(publicKey: string, network: NetworkId): AccountAudit {

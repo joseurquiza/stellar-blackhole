@@ -48,18 +48,18 @@ export function AuditDashboard({ audit }: { audit: AccountAudit }) {
       )}
 
       <Tabs defaultValue="balances" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="balances">
-            <Coins className="mr-1 h-4 w-4" /> Balances
+        <TabsList className="grid h-auto w-full grid-cols-2 gap-1 sm:grid-cols-4">
+          <TabsTrigger value="balances" className="gap-1.5">
+            <Coins className="h-4 w-4 shrink-0" /> Balances
           </TabsTrigger>
-          <TabsTrigger value="positions">
-            <Layers className="mr-1 h-4 w-4" /> Positions
+          <TabsTrigger value="positions" className="gap-1.5">
+            <Layers className="h-4 w-4 shrink-0" /> Positions
           </TabsTrigger>
-          <TabsTrigger value="claims">
-            <Gift className="mr-1 h-4 w-4" /> Claims
+          <TabsTrigger value="claims" className="gap-1.5">
+            <Gift className="h-4 w-4 shrink-0" /> Claims
           </TabsTrigger>
-          <TabsTrigger value="access">
-            <KeyRound className="mr-1 h-4 w-4" /> Access
+          <TabsTrigger value="access" className="gap-1.5">
+            <KeyRound className="h-4 w-4 shrink-0" /> Access
           </TabsTrigger>
         </TabsList>
 
@@ -196,7 +196,11 @@ function StatCard({ label, value, accent }: { label: string; value: string; acce
 }
 
 function Row({ children }: { children: React.ReactNode }) {
-  return <div className="flex items-center justify-between rounded-md border bg-card px-3 py-2">{children}</div>
+  return (
+    <div className="flex items-center justify-between gap-3 rounded-md border bg-card px-3 py-2 [&>*]:min-w-0 [&>span:last-child]:shrink-0">
+      {children}
+    </div>
+  )
 }
 
 function Empty({ label }: { label: string }) {

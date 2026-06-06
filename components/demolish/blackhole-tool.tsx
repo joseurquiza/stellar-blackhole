@@ -7,7 +7,7 @@ import { DemoModeSimulation } from "@/components/demolish/demo-mode"
 import { DemolishFaq } from "@/components/demolish/demolish-faq"
 import { ThemeToggle } from "@/components/theme-toggle"
 
-type ToolMode = "live" | "demo" | "toolkit"
+type ToolMode = "live" | "simulate" | "toolkit"
 
 const MODE_META: Record<
   ToolMode,
@@ -38,10 +38,10 @@ const MODE_META: Record<
       text: "Live mode — real keys sign real transactions and funds move irreversibly on Stellar.",
     },
   },
-  demo: {
-    label: "Demo Mode",
-    description: "The real flow with fabricated data — nothing is broadcast",
-    badge: "DEMO",
+  simulate: {
+    label: "Simulate Mode",
+    description: "Reads your real account, simulates the demolish — nothing signed or broadcast",
+    badge: "SIMULATE",
     iconWrap: "bg-muted ring-1 ring-border",
     icon: "text-muted-foreground",
     statusBar: "border-border bg-muted/40",
@@ -49,7 +49,7 @@ const MODE_META: Record<
     frame: "rounded-xl border-2 border-dashed border-border bg-muted/20 p-4 sm:p-6",
     banner: {
       wrap: "border-border bg-muted/40",
-      text: "Demo mode — fabricated data, no Horizon reads, no signing, nothing broadcast.",
+      text: "Simulate mode — real account read live from Horizon; only the destructive execution is simulated, never signed or broadcast.",
     },
   },
   toolkit: {
@@ -130,7 +130,7 @@ export function BlackholeTool() {
               >
                 {mode === "live" ? (
                   <Radio className={`h-4 w-4 ${MODE_META[mode].icon}`} />
-                ) : mode === "demo" ? (
+                ) : mode === "simulate" ? (
                   <FlaskConical className={`h-4 w-4 ${MODE_META[mode].icon}`} />
                 ) : (
                   <Wrench className={`h-4 w-4 ${MODE_META[mode].icon}`} />
@@ -154,7 +154,7 @@ export function BlackholeTool() {
               aria-label="Tool mode"
               className="inline-flex shrink-0 rounded-lg border bg-muted/50 p-0.5 text-xs font-medium"
             >
-              {(["live", "demo", "toolkit"] as ToolMode[]).map((m) => {
+              {(["live", "simulate", "toolkit"] as ToolMode[]).map((m) => {
                 const selectedClass =
                   m === "live"
                     ? "bg-destructive text-destructive-foreground shadow-sm"
@@ -200,7 +200,7 @@ export function BlackholeTool() {
                 </p>
               </div>
             )}
-            <LiveWizard simulate={mode === "demo"} />
+            <LiveWizard simulate={mode === "simulate"} />
           </div>
         )}
 

@@ -46,7 +46,7 @@ export const demolishFaq: { question: string; answer: string }[] = [
   {
     question: "How does it handle trustlines and non-XLM token balances?",
     answer:
-      "Before merging, Stellar BlackHole sells non-XLM classic assets to a base asset using native path payments over Stellar's SDEX and AMM order books, then removes the now-empty trustlines. Soroban token balances and DeFi positions (Blend, Aquarius, Soroswap) are detected and surfaced as a read-only Preview.",
+      "Before merging, Stellar BlackHole sells non-XLM classic assets to a base asset using native path payments over Stellar's SDEX and AMM order books, then removes the now-empty trustlines. Soroban token balances and DeFi positions are discovered keylessly — we scan the account's invoke-host-function history on public Horizon to enumerate every contract it has touched, then read live balances and labels (Soroswap, Aquarius, and more) directly from the public Soroban RPC. No external indexer or API key is required, and positions are surfaced as a read-only Preview to close in their source protocol.",
   },
 ]
 
