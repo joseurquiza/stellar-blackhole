@@ -3,7 +3,6 @@ import Link from "next/link"
 import Image from "next/image"
 import { MobileMenu } from "./mobile-menu"
 import { ThemeToggle } from "./theme-toggle"
-import { BlackHoleLink } from "./blackhole-link"
 
 export function Header() {
   return (
@@ -24,9 +23,6 @@ export function Header() {
         <Link href="/" className="hover:text-white transition-colors">
           Home
         </Link>
-        <BlackHoleLink className="hover:text-white transition-colors">
-          BlackHole
-        </BlackHoleLink>
       </nav>
       
       {/* Desktop Launch Button + Theme Toggle */}

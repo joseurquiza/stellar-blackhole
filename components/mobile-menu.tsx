@@ -5,7 +5,6 @@ import { Menu, X, Rocket } from 'lucide-react'
 import Link from "next/link"
 import Image from "next/image"
 import { ThemeToggle } from "./theme-toggle"
-import { BlackHoleLink } from "./blackhole-link"
 
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false)
@@ -57,12 +56,6 @@ export function MobileMenu() {
               >
                 Home
               </Link>
-              <BlackHoleLink
-                onNavigate={closeMenu}
-                className="block py-2 text-gray-300 hover:text-white transition-colors"
-              >
-                BlackHole
-              </BlackHoleLink>
 
               <div className="flex items-center justify-between py-2 text-gray-300">
                 <span>Theme</span>
