@@ -23,6 +23,14 @@ export function Header() {
         <Link href="/" className="hover:text-white transition-colors">
           Home
         </Link>
+        <a
+          href="https://blackhole.action-tokens.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-white transition-colors"
+        >
+          BlackHole
+        </a>
       </nav>
       
       {/* Desktop Launch Button + Theme Toggle */}

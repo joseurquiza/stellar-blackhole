@@ -56,6 +56,15 @@ export function MobileMenu() {
               >
                 Home
               </Link>
+              <a
+                href="https://blackhole.action-tokens.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={closeMenu}
+                className="block py-2 text-gray-300 hover:text-white transition-colors"
+              >
+                BlackHole
+              </a>
 
               <div className="flex items-center justify-between py-2 text-gray-300">
                 <span>Theme</span>
