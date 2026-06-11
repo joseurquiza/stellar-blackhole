@@ -10,9 +10,9 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'Stellar BlackHole — Non-Custodial Account Cleanup & Merge',
+  title: 'Action Tokens - Empowering Positive Actions Through Blockchain',
   description:
-    'A free, non-custodial tool to close a Stellar account: remove trustlines, cancel offers, sell assets, and merge the account to reclaim your locked XLM reserves. Keys never leave your browser.',
+    'Action Tokens powers a platform where creators, brands, and communities can own customizable PLOTs and unlock experiences through AR, Virtual Worlds, and Web3 utilities.',
   icons: {
     icon: '/images/action-tokens-logo.jpg',
     shortcut: '/images/action-tokens-logo.jpg',
