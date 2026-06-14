@@ -273,7 +273,8 @@ lib/stellar/                   Pure engine (no React)
                 &quot;claimable now&quot; boolean, and flags multisig and disabled-master-key configurations. After the
                 classic graph is reconstructed, it invokes the keyless Soroban discovery layer (§6.4) as a best-effort
                 step — failures there are swallowed so they can never block or invalidate the classic audit. Discovered
-                Soroban tokens and DeFi positions are surfaced for review rather than auto-liquidated in this phase.
+                Soroban tokens and DeFi positions are surfaced for review by default, and can be actively swept before
+                merge when the opt-in Soroban-sweep flag is enabled (§6.4).
               </p>
 
               <SubHeading icon={CircleAlert}>6.2 Analysis (analysis.ts)</SubHeading>
@@ -320,6 +321,20 @@ lib/stellar/                   Pure engine (no React)
                 token scan, so deeper unwinding logic (e.g. Blend, Soroswap LP) can be added per protocol without
                 touching the discovery core. Every contract that is discovered but not recognized is still surfaced as a
                 token rather than mislabeled.
+              </p>
+              <p>
+                Behind an opt-in feature flag (<Code>NEXT_PUBLIC_SOROBAN_SWEEP</Code>), discovery is promoted to a real{" "}
+                <Em>sweep-before-merge</Em> phase that runs entirely separately from — and ahead of — the stable classic
+                pipeline, so existing users are unaffected when it is off. Because contract-held value lives in storage
+                rather than as classic sub-entries, it does not block a merge but is lost if left behind. The sweep (1)
+                withdraws closeable adapter positions, (2) <Code>transfer</Code>s remaining SAC/Soroban token balances to
+                the destination, and (3) revokes dangling allowances via <Code>approve(spender, 0)</Code>. Soroban
+                transactions carry exactly one <Code>InvokeHostFunction</Code> op and use a different submission flow than
+                classic ops — <Code>simulate → assemble footprint/fees → send → poll getTransaction</Code> — so each call
+                is its own transaction. Since a withdrawal can deposit a classic asset back, the account is{" "}
+                <Em>re-audited</Em> after the sweep and the classic plan is rebuilt before cleanup and merge. Adapters
+                stay detection-only (manual close) until their exit calls are verified on funded testnet positions, and
+                mainnet sweeps are gated behind a required Simulate/testnet rehearsal of the exact plan.
               </p>
 
               <SubHeading icon={Layers}>6.5 Planning (plan.ts)</SubHeading>
@@ -440,13 +455,16 @@ lib/stellar/                   Pure engine (no React)
 
             <Section id="roadmap" icon={MapIcon} title="11. Roadmap">
               <ul className="space-y-3">
-                <Bullet term="Soroban liquidation">
-                  Keyless Soroban token and DeFi discovery is live (§6.4); the next step is promoting detected balances
-                  into automated liquidation and unwinding before merge.
+                <Bullet term="Soroban sweep (shipped, opt-in)">
+                  Keyless discovery now backs an opt-in sweep-before-merge pipeline (§6.4): token transfers, allowance
+                  revocation, and adapter-driven position withdrawals run ahead of the classic flow behind a feature
+                  flag, with a re-audit between phases and a mainnet rehearsal gate. Enabled with{" "}
+                  <Code>NEXT_PUBLIC_SOROBAN_SWEEP</Code> while adapters are verified.
                 </Bullet>
-                <Bullet term="Expanded protocol registry">
-                  Grow the verified-address registry and per-protocol <Code>defiAdapters</Code> beyond Soroswap and
-                  Aquarius to deeply read and unwind Blend, Phoenix, and other Soroban positions.
+                <Bullet term="Verify + expand protocol adapters">
+                  Confirm the Blend, Phoenix, and Soroswap exit calls against funded testnet positions to flip them from
+                  detection-only to auto-sweep, then grow the verified-address registry and per-protocol{" "}
+                  <Code>defiAdapters</Code> to more Soroban protocols.
                 </Bullet>
                 <Bullet term="Batch / portfolio mode">
                   Audit and demolish multiple accounts in one guided session.

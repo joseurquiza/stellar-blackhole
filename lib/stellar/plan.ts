@@ -1,12 +1,15 @@
 import { Operation, Asset, type xdr } from "@stellar/stellar-sdk"
 import { computeBlockers, computeWarnings } from "./analysis"
 import { quoteStrictSend, toSdkAsset, type RouteQuote } from "./routing"
+import { SOROBAN_SWEEP_ENABLED } from "./flags"
+import { buildSorobanUnits, summarizeSorobanUnits } from "./soroban-plan"
 import type {
   AccountAudit,
   DemolitionConfig,
   DemolitionPlan,
   PlannedOperation,
   PlannedTransaction,
+  SorobanUnit,
   StepKind,
 } from "./types"
 
@@ -332,9 +335,20 @@ export function groupUnitsIntoTransactions(units: DemolitionUnit[]): {
 export async function buildDemolitionPlan(
   audit: AccountAudit,
   config: DemolitionConfig,
-): Promise<{ plan: DemolitionPlan; batches: DemolitionUnit[][] }> {
+): Promise<{ plan: DemolitionPlan; batches: DemolitionUnit[][]; sorobanUnits: SorobanUnit[] }> {
   const { units } = await buildDemolitionUnits(audit, config)
   const { display, batches } = groupUnitsIntoTransactions(units)
+
+  // Soroban sweep (additive; flag-gated). When enabled, these units run BEFORE
+  // the classic batches and are surfaced as their own preview group at the top.
+  // When the flag is off, sorobanUnits is always empty and the classic display
+  // is byte-for-byte unchanged.
+  let sorobanUnits: SorobanUnit[] = []
+  let sorobanDisplay: PlannedTransaction[] = []
+  if (SOROBAN_SWEEP_ENABLED && config.sweepSoroban) {
+    sorobanUnits = await buildSorobanUnits(audit.network, audit, config)
+    sorobanDisplay = summarizeSorobanUnits(sorobanUnits)
+  }
 
   const totalReserve = units.reduce((sum, u) => sum + u.reserveReclaimed, 0)
   const spendable = Number.parseFloat(spendableXlm(audit))
@@ -343,12 +357,12 @@ export async function buildDemolitionPlan(
   const plan: DemolitionPlan = {
     publicKey: audit.publicKey,
     network: audit.network,
-    transactions: display,
+    transactions: [...sorobanDisplay, ...display],
     estimatedRecoveredXlm,
     blockers: computeBlockers(audit),
     warnings: computeWarnings(audit),
     config,
   }
 
-  return { plan, batches }
+  return { plan, batches, sorobanUnits }
 }

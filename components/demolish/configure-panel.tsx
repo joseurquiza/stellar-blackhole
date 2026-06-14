@@ -14,9 +14,11 @@ type ConfigShape = Omit<DemolitionConfig, "publicKey" | "network">
 export function ConfigurePanel({
   config,
   updateConfig,
+  sorobanEnabled = false,
 }: {
   config: ConfigShape
   updateConfig: (patch: Partial<ConfigShape>) => void
+  sorobanEnabled?: boolean
 }) {
   const destValid = config.destinationAddress === "" || isValidDestination(config.destinationAddress)
   const medValid = !config.useMediator || config.mediatorAddress === "" || isValidDestination(config.mediatorAddress ?? "")
@@ -77,6 +79,30 @@ export function ConfigurePanel({
         </div>
         <Switch checked={config.claimBalances} onCheckedChange={(v) => updateConfig({ claimBalances: v })} />
       </div>
+
+      {sorobanEnabled && (
+        <div className="space-y-3 rounded-lg border p-3">
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label>Sweep Soroban positions before merge</Label>
+              <p className="text-xs text-muted-foreground">
+                Withdraw Blend/Phoenix/Soroswap positions, transfer SAC &amp; Soroban token balances to your
+                destination, and revoke dangling allowances. Value held in contracts is otherwise lost on merge.
+              </p>
+            </div>
+            <Switch checked={config.sweepSoroban ?? false} onCheckedChange={(v) => updateConfig({ sweepSoroban: v })} />
+          </div>
+          {config.sweepSoroban && (
+            <Alert>
+              <Info className="h-4 w-4" />
+              <AlertDescription>
+                Soroban contract calls are irreversible. On mainnet you must first rehearse this exact sweep in Simulate
+                (or on testnet) before it can run.
+              </AlertDescription>
+            </Alert>
+          )}
+        </div>
+      )}
 
       <div className="space-y-3 rounded-lg border p-3">
         <div className="flex items-center justify-between">

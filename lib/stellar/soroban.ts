@@ -2,6 +2,7 @@ import {
   Contract,
   rpc,
   Address,
+  nativeToScVal,
   scValToNative,
   xdr,
   TransactionBuilder,
@@ -10,7 +11,7 @@ import {
   Horizon,
 } from "@stellar/stellar-sdk"
 import { getNetwork } from "./network"
-import type { NetworkId, SorobanTokenBalance, DefiPosition } from "./types"
+import type { NetworkId, SorobanTokenBalance, SorobanAllowance, DefiPosition } from "./types"
 
 /**
  * Known protocol contract ids by network, used to LABEL discovered positions.
@@ -29,7 +30,7 @@ const KNOWN_PROTOCOLS: Record<NetworkId, ProtocolEntry[]> = {
   testnet: [],
 }
 
-function rpcServer(network: NetworkId): rpc.Server {
+export function rpcServer(network: NetworkId): rpc.Server {
   const url = getNetwork(network).sorobanRpcUrl
   return new rpc.Server(url, { allowHttp: url.startsWith("http://") })
 }
@@ -255,4 +256,127 @@ export async function discoverAccountPositions(
   }
 
   return { tokens, positions }
+}
+
+// ---------------------------------------------------------------------------
+// Soroban sweep: operation builders + allowance reads (additive; only invoked
+// when the Soroban-sweep feature flag is on). These return raw operations that
+// the Soroban executor wraps in a transaction and prepares (simulate +
+// assemble footprint/fees) before signing.
+// ---------------------------------------------------------------------------
+
+/** i128 ScVal from a raw (un-scaled) integer-like string. */
+function i128(raw: string): xdr.ScVal {
+  return nativeToScVal(BigInt(raw), { type: "i128" })
+}
+
+/**
+ * Build a token `transfer(from, to, amount)` invocation to move a SAC/Soroban
+ * token balance out of the account to the destination before merge.
+ */
+export function buildTransferOp(
+  contractId: string,
+  from: string,
+  to: string,
+  rawAmount: string,
+): xdr.Operation {
+  const contract = new Contract(contractId)
+  return contract.call(
+    "transfer",
+    new Address(from).toScVal(),
+    new Address(to).toScVal(),
+    i128(rawAmount),
+  )
+}
+
+/**
+ * Build a token `approve(from, spender, 0, expiration_ledger)` invocation to
+ * revoke a dangling allowance. Expiration 0 clears the entry per SEP-41.
+ */
+export function buildApproveZeroOp(
+  contractId: string,
+  from: string,
+  spender: string,
+): xdr.Operation {
+  const contract = new Contract(contractId)
+  return contract.call(
+    "approve",
+    new Address(from).toScVal(),
+    new Address(spender).toScVal(),
+    i128("0"),
+    nativeToScVal(0, { type: "u32" }),
+  )
+}
+
+/**
+ * Best-effort read of token allowances the account has granted to a set of
+ * candidate spender contracts (e.g. routers/pools it has interacted with).
+ * Returns only non-zero allowances. Never throws — allowance reads are
+ * advisory and must not block the audit.
+ */
+export async function readAllowances(
+  network: NetworkId,
+  account: string,
+  tokenContractIds: string[],
+  candidateSpenders: string[],
+): Promise<SorobanAllowance[]> {
+  const out: SorobanAllowance[] = []
+  if (tokenContractIds.length === 0 || candidateSpenders.length === 0) return out
+
+  try {
+    const server = rpcServer(network)
+    const passphrase = getNetwork(network).networkPassphrase
+    const source = new Account(account, "0")
+
+    for (const tokenId of tokenContractIds) {
+      const contract = new Contract(tokenId)
+      let symbol: string | undefined
+      try {
+        const symTx = new TransactionBuilder(source, { fee: BASE_FEE, networkPassphrase: passphrase })
+          .addOperation(contract.call("symbol"))
+          .setTimeout(30)
+          .build()
+        const symSim = await server.simulateTransaction(symTx)
+        if (!rpc.Api.isSimulationError(symSim) && symSim.result?.retval) {
+          symbol = scValToNative(symSim.result.retval).toString()
+        }
+      } catch {
+        // optional
+      }
+
+      for (const spender of candidateSpenders) {
+        if (spender === account) continue
+        try {
+          const tx = new TransactionBuilder(source, { fee: BASE_FEE, networkPassphrase: passphrase })
+            .addOperation(
+              contract.call(
+                "allowance",
+                new Address(account).toScVal(),
+                new Address(spender).toScVal(),
+              ),
+            )
+            .setTimeout(30)
+            .build()
+          const sim = await server.simulateTransaction(tx)
+          if (rpc.Api.isSimulationError(sim) || !sim.result?.retval) continue
+          const amount = scValToNative(sim.result.retval).toString()
+          if (amount && amount !== "0") {
+            out.push({
+              contractId: tokenId,
+              symbol,
+              spender,
+              amount,
+              spenderLabel: labelContract(network, spender)?.name,
+            })
+          }
+        } catch {
+          // ignore individual allowance probe failures
+        }
+      }
+    }
+  } catch {
+    // best effort
+  }
+
+  return out
 }

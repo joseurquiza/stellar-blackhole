@@ -1,7 +1,8 @@
 import { Horizon } from "@stellar/stellar-sdk"
 import { getNetwork, makeAssetId, NATIVE_ASSET } from "./network"
-import { discoverAccountPositions } from "./soroban"
-import { detectAllDefiPositions } from "./defiAdapters"
+import { discoverAccountPositions, readAllowances } from "./soroban"
+import { detectAllDefiPositions, knownSpenders } from "./defiAdapters"
+import { SOROBAN_SWEEP_ENABLED } from "./flags"
 import type {
   AccountAudit,
   BalanceLine,
@@ -215,6 +216,17 @@ export async function loadAccountAudit(publicKey: string, network: NetworkId): P
     audit.sorobanTokens = tokens
     const adapterPositions = await detectAllDefiPositions(network, audit)
     audit.defiPositions = [...positions, ...adapterPositions]
+
+    // Allowance probing only runs with the Soroban-sweep feature flag on, so
+    // classic users incur zero extra RPC calls and behavior is unchanged.
+    if (SOROBAN_SWEEP_ENABLED && tokens.length > 0) {
+      audit.sorobanAllowances = await readAllowances(
+        network,
+        publicKey,
+        tokens.map((t) => t.contractId),
+        knownSpenders(network),
+      )
+    }
   } catch {
     // discovery failed; classic audit remains fully valid
   }

@@ -111,7 +111,11 @@ export function AuditDashboard({ audit }: { audit: AccountAudit }) {
             <Row key={`${d.protocol}-${i}`}>
               <div className="flex items-center gap-2">
                 <span>{d.protocol}</span>
-                <Badge variant="outline">Preview</Badge>
+                {d.closeable ? (
+                  <Badge variant="secondary">Auto-sweep</Badge>
+                ) : (
+                  <Badge variant="outline">Manual close</Badge>
+                )}
               </div>
               <span className="text-xs text-muted-foreground">{d.summary}</span>
             </Row>
