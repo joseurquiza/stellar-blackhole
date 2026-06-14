@@ -14,6 +14,11 @@ export const demolishFaq: { question: string; answer: string }[] = [
       "Stellar BlackHole is a free, non-custodial web tool that audits a Stellar account and guides you through closing it down — removing trustlines, canceling DEX offers, withdrawing liquidity, selling non-XLM assets, and finally merging the account to reclaim your locked XLM reserves. All transactions are signed in your browser; your secret keys are never sent to any server.",
   },
   {
+    question: "What does it mean to \"spaghettify your wallet\"?",
+    answer:
+      "Spaghettification is the astrophysics term for what a black hole's tidal forces do to anything that falls in: it stretches matter into a long, thin stream until nothing structured is left. Stellar BlackHole borrows the metaphor for closing an account — it pulls your wallet apart sub-entry by sub-entry, in order: canceling DEX offers, withdrawing liquidity, selling non-XLM assets, deleting data entries, and removing trustlines, until only native XLM remains. The final ACCOUNT_MERGE then collapses what's left and returns your locked XLM reserves. It's a vivid way of describing a careful, fully non-custodial teardown.",
+  },
+  {
     question: "How do I close a Stellar account and get my XLM back?",
     answer:
       "To close a Stellar account you must first remove every sub-entry it holds: cancel open DEX offers, withdraw from liquidity pools, sell or transfer non-XLM balances, delete data entries, and remove trustlines. Once the account holds only native XLM, you run the ACCOUNT_MERGE operation to a destination account. This transfers the remaining balance and reclaims the base reserve. Stellar BlackHole builds this exact ordered plan for you and shows it as a dry-run before you sign.",
