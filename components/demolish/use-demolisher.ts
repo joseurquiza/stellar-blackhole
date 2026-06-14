@@ -46,7 +46,7 @@ const DEFAULT_CONFIG: Omit<DemolitionConfig, "publicKey" | "network"> = {
 
 export function useDemolisher(options?: { simulate?: boolean }) {
   const simulate = options?.simulate ?? false
-  const [network, setNetwork] = useState<NetworkId>("testnet")
+  const [network, setNetwork] = useState<NetworkId>("public")
   const [publicKey, setPublicKey] = useState("")
   const [stage, setStage] = useState<WizardStage>("connect")
   const [audit, setAudit] = useState<AccountAudit | null>(null)
