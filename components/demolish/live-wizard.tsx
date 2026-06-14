@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Spinner } from "@/components/ui/spinner"
 import {
   AlertDialog,
@@ -56,6 +56,14 @@ export function LiveWizard({ simulate = false }: { simulate?: boolean }) {
 
   const stageIndex = STAGES.indexOf(state.stage)
   const hasBlockers = (state.plan?.blockers.length ?? 0) > 0
+  // Soroban mainnet rehearsal gate: when a live mainnet run includes Soroban
+  // units that haven't been rehearsed, block execution until Simulate is run.
+  const sorobanGateBlocked =
+    !simulate &&
+    state.sorobanEnabled &&
+    state.network === "public" &&
+    state.sorobanUnits.length > 0 &&
+    !state.rehearsed
 
   return (
     <div className="space-y-6">
@@ -197,7 +205,7 @@ export function LiveWizard({ simulate = false }: { simulate?: boolean }) {
             <CardDescription>Choose where funds go and which cleanup steps to include.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <ConfigurePanel config={d.config} updateConfig={d.updateConfig} />
+            <ConfigurePanel config={d.config} updateConfig={d.updateConfig} sorobanEnabled={state.sorobanEnabled} />
             <div className="flex justify-between">
               <Button variant="ghost" onClick={() => d.setStage("audit")}>
                 <ArrowLeft className="mr-1 h-4 w-4" /> Back
@@ -222,6 +230,18 @@ export function LiveWizard({ simulate = false }: { simulate?: boolean }) {
           </CardHeader>
           <CardContent className="space-y-5">
             <PreviewPanel plan={state.plan} />
+
+            {sorobanGateBlocked && (
+              <Alert>
+                <FlaskConical className="h-4 w-4" />
+                <AlertTitle>Rehearsal required for the Soroban sweep (Beta)</AlertTitle>
+                <AlertDescription>
+                  This plan includes {state.sorobanUnits.length} irreversible Soroban contract call
+                  {state.sorobanUnits.length === 1 ? "" : "s"}. Run a Simulate pass of this exact plan (or rehearse on
+                  testnet) before executing on mainnet.
+                </AlertDescription>
+              </Alert>
+            )}
 
             <div className="rounded-lg border p-4">
               <h4 className="mb-3 text-sm font-semibold">Sign</h4>
@@ -252,7 +272,7 @@ export function LiveWizard({ simulate = false }: { simulate?: boolean }) {
 
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button variant="destructive" disabled={hasBlockers}>
+                  <Button variant="destructive" disabled={hasBlockers || sorobanGateBlocked}>
                     <Flame className="mr-1 h-4 w-4" /> Demolish account
                   </Button>
                 </AlertDialogTrigger>

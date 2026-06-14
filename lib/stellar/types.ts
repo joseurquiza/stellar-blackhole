@@ -116,6 +116,14 @@ export interface DefiPosition {
   summary: string
   // detection only in this phase; closing handled by adapters later
   closeable: boolean
+  // --- additive Soroban-sweep fields (only populated when the feature flag is
+  // on; ignored entirely by the classic flow) ---
+  // contract that holds the position (pool / pair / vault)
+  contractId?: string
+  // id of the adapter that detected it and can build close ops
+  adapterId?: string
+  // assets expected back to the account when this position is withdrawn
+  withdrawable?: { asset: string; amount: string }[]
 }
 
 export interface AccountAudit {
@@ -216,6 +224,11 @@ export interface DemolitionConfig {
   claimBalances: boolean
   // withdraw from liquidity pools
   withdrawPools: boolean
+  // --- additive Soroban-sweep options (optional; classic flow leaves unset) ---
+  // sweep Soroban/SAC token balances + close DeFi positions before merge
+  sweepSoroban?: boolean
+  // user has rehearsed this Soroban sweep on testnet/Simulate (mainnet gate)
+  rehearsalConfirmed?: boolean
 }
 
 // ---- Execution ----
@@ -228,4 +241,40 @@ export interface ExecutionStep {
   status: StepStatus
   txHash?: string
   error?: string
+}
+
+// ---- Soroban sweep (additive; only used when SOROBAN_SWEEP_ENABLED) ----
+//
+// Soroban contract calls cannot be batched like classic ops (one
+// InvokeHostFunction per transaction), and they require a different submission
+// flow (simulate -> assemble footprint/fees -> send -> poll). They are modeled
+// as standalone units that run BEFORE the classic demolition.
+
+export type SorobanStepKind =
+  | "soroban-withdraw" // withdraw a lending / LP position via an adapter
+  | "soroban-claim" // claim protocol rewards
+  | "soroban-transfer" // move a SAC / Soroban token balance to destination
+  | "soroban-revoke-allowance" // approve(spender, 0) to clear a dangling allowance
+
+export interface SorobanUnit {
+  kind: SorobanStepKind
+  contractId: string
+  method: string
+  description: string
+  details: string[]
+  // serialized so the planning layer stays free of XDR concerns; the executor
+  // rebuilds the operation from these args against a fresh source account.
+  build: {
+    // marker describing how the executor should construct the op
+    op: "transfer" | "approve-zero" | "adapter-invoke"
+    // raw i128 amount for transfer; ignored for others
+    rawAmount?: string
+    destination?: string
+    spender?: string
+    // for adapter-invoke: the adapter id + an opaque payload it understands
+    adapterId?: string
+    payload?: Record<string, unknown>
+  }
+  // human note about what value this recovers and to where
+  recoversTo?: string
 }
