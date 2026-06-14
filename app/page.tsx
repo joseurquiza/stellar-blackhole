@@ -5,7 +5,7 @@ import { BlackholeTool } from "@/components/demolish/blackhole-tool"
 const PAGE_URL = "https://www.action-tokens.com"
 const TITLE = "Stellar BlackHole — Non-Custodial Account Cleanup & Merge"
 const DESCRIPTION =
-  "A free, non-custodial tool to close a Stellar account: remove trustlines, cancel offers, sell assets, and merge the account to reclaim your locked XLM reserves. Keys never leave your browser. Testnet rehearsal included."
+  "Spaghettify your wallet in the stellar black hole. A free, non-custodial tool to close a Stellar account: remove trustlines, cancel offers, sell assets, and merge the account to reclaim your locked XLM reserves. Keys never leave your browser. Testnet rehearsal included."
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.action-tokens.com"),
@@ -22,6 +22,7 @@ export const metadata: Metadata = {
     "delete Stellar account",
     "Stellar base reserve",
     "Soroban token",
+    "spaghettify wallet",
   ],
   alternates: { canonical: PAGE_URL },
   robots: {

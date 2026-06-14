@@ -106,7 +106,7 @@ export function BlackholeTool() {
                   Stellar BlackHole
                 </h1>
                 <p className="mt-0.5 text-sm text-muted-foreground text-pretty">
-                  Non-custodial cleanup and account merge.
+                  Spaghettify your wallet in the stellar black hole — non-custodial cleanup and account merge.
                 </p>
               </div>
             </div>
