@@ -234,7 +234,7 @@ export function LiveWizard({ simulate = false }: { simulate?: boolean }) {
             {sorobanGateBlocked && (
               <Alert>
                 <FlaskConical className="h-4 w-4" />
-                <AlertTitle>Rehearsal required for the Soroban sweep</AlertTitle>
+                <AlertTitle>Rehearsal required for the Soroban sweep (Beta)</AlertTitle>
                 <AlertDescription>
                   This plan includes {state.sorobanUnits.length} irreversible Soroban contract call
                   {state.sorobanUnits.length === 1 ? "" : "s"}. Run a Simulate pass of this exact plan (or rehearse on

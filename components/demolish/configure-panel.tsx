@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { Slider } from "@/components/ui/slider"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Badge } from "@/components/ui/badge"
 import { Info } from "lucide-react"
 import { isValidDestination } from "@/lib/stellar/analysis"
 import type { DemolitionConfig } from "@/lib/stellar/types"
@@ -84,7 +85,12 @@ export function ConfigurePanel({
         <div className="space-y-3 rounded-lg border p-3">
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label>Sweep Soroban positions before merge</Label>
+              <div className="flex items-center gap-2">
+                <Label>Sweep Soroban positions before merge</Label>
+                <Badge variant="secondary" className="uppercase tracking-wide">
+                  Beta
+                </Badge>
+              </div>
               <p className="text-xs text-muted-foreground">
                 Withdraw Blend/Phoenix/Soroswap positions, transfer SAC &amp; Soroban token balances to your
                 destination, and revoke dangling allowances. Value held in contracts is otherwise lost on merge.
@@ -96,8 +102,8 @@ export function ConfigurePanel({
             <Alert>
               <Info className="h-4 w-4" />
               <AlertDescription>
-                Soroban contract calls are irreversible. On mainnet you must first rehearse this exact sweep in Simulate
-                (or on testnet) before it can run.
+                Beta: Soroban contract calls are irreversible, and protocol adapters are still being hardened. On
+                mainnet you must first rehearse this exact sweep in Simulate (or on testnet) before it can run.
               </AlertDescription>
             </Alert>
           )}
