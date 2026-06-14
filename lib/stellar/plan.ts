@@ -14,6 +14,14 @@ const BASE_RESERVE = 0.5
 const MAX_OPS_PER_TX = 95
 
 /**
+ * On-chain attribution stamp written as the text memo of the final merge
+ * transaction. Stellar text memos are capped at 28 UTF-8 bytes; this is 13.
+ * Block explorers (stellar.expert, etc.) surface it on the transaction page,
+ * permanently marking that the merge was performed with this tool.
+ */
+export const BLACKHOLE_MEMO = "via BlackHole"
+
+/**
  * A demolition unit couples the human-readable preview with the exact SDK
  * operations that will be submitted. The planner and the executor BOTH derive
  * their behavior from these units, guaranteeing that what the user previews is
@@ -269,7 +277,11 @@ export function groupUnitsIntoTransactions(units: DemolitionUnit[]): {
   batches: DemolitionUnit[][]
 } {
   const cleanup = units.filter((u) => u.kind !== "account-merge" && u.kind !== "mediator-payment")
-  const finalUnits = units.filter((u) => u.kind === "mediator-payment" || u.kind === "account-merge")
+  // The mediator payment and the merge are kept in separate transactions: the
+  // merge must ride alone so it can carry the BlackHole attribution memo without
+  // colliding with the user's mediator memo (a tx can hold only one memo).
+  const mediatorUnits = units.filter((u) => u.kind === "mediator-payment")
+  const mergeUnits = units.filter((u) => u.kind === "account-merge")
 
   const batches: DemolitionUnit[][] = []
   let current: DemolitionUnit[] = []
@@ -286,22 +298,32 @@ export function groupUnitsIntoTransactions(units: DemolitionUnit[]): {
     opCount += unit.ops.length
   }
   if (current.length) batches.push(current)
-  if (finalUnits.length) batches.push(finalUnits)
+  if (mediatorUnits.length) batches.push(mediatorUnits)
+  if (mergeUnits.length) batches.push(mergeUnits)
 
-  const display: PlannedTransaction[] = batches.map((batch, i) => ({
-    label:
-      i === batches.length - 1 && batch.some((u) => u.kind === "account-merge")
-        ? "Final: mediator + account merge"
-        : `Cleanup transaction ${i + 1}`,
-    operations: batch.map((u) => ({
-      kind: u.kind,
-      description: u.description,
-      details: u.details,
-      reserveReclaimed: u.reserveReclaimed,
-      destructive: u.destructive,
-    })),
-    requiresAdditionalSignatures: batch.some((u) => u.requiresAdditionalSignatures),
-  }))
+  let cleanupCounter = 0
+  const display: PlannedTransaction[] = batches.map((batch) => {
+    let label: string
+    if (batch.some((u) => u.kind === "account-merge")) {
+      label = `Final: account merge · stamped "${BLACKHOLE_MEMO}"`
+    } else if (batch.some((u) => u.kind === "mediator-payment")) {
+      label = "Route balance through mediator"
+    } else {
+      cleanupCounter += 1
+      label = `Cleanup transaction ${cleanupCounter}`
+    }
+    return {
+      label,
+      operations: batch.map((u) => ({
+        kind: u.kind,
+        description: u.description,
+        details: u.details,
+        reserveReclaimed: u.reserveReclaimed,
+        destructive: u.destructive,
+      })),
+      requiresAdditionalSignatures: batch.some((u) => u.requiresAdditionalSignatures),
+    }
+  })
 
   return { display, batches }
 }

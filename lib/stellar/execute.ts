@@ -3,7 +3,7 @@ import { getHorizonServer } from "./account"
 import { getNetwork } from "./network"
 import { signTransaction, type SignerSet } from "./signing"
 import type { DemolitionConfig, ExecutionStep, NetworkId } from "./types"
-import type { DemolitionUnit } from "./plan"
+import { BLACKHOLE_MEMO, type DemolitionUnit } from "./plan"
 
 // 0.001 XLM per operation — comfortably above base fee to survive mild surge.
 const FEE_PER_OP = "10000"
@@ -35,7 +35,11 @@ export async function executeDemolition(
   const passphrase = getNetwork(network).networkPassphrase
   const steps: ExecutionStep[] = batches.map((batch, i) => ({
     id: `tx-${i}`,
-    label: batch.some((u) => u.isMerge) ? "Mediator + account merge" : `Cleanup transaction ${i + 1}`,
+    label: batch.some((u) => u.isMerge)
+      ? `Account merge · stamped "${BLACKHOLE_MEMO}"`
+      : batch.some((u) => u.kind === "mediator-payment")
+        ? "Route balance through mediator"
+        : `Cleanup transaction ${i + 1}`,
     status: "pending",
   }))
 
@@ -63,9 +67,12 @@ export async function executeDemolition(
       for (const unit of batch) {
         for (const op of unit.ops) builder = builder.addOperation(op)
       }
-      // Attach mediator memo on the final routing transaction when provided.
+      // Attach mediator memo on the routing transaction when provided, and
+      // stamp the standalone merge transaction with the BlackHole attribution.
       if (config.useMediator && config.mediatorMemo && batch.some((u) => u.kind === "mediator-payment")) {
         builder = builder.addMemo(Memo.text(config.mediatorMemo.slice(0, 28)))
+      } else if (batch.some((u) => u.isMerge)) {
+        builder = builder.addMemo(Memo.text(BLACKHOLE_MEMO))
       }
       const tx = builder.setTimeout(180).build()
 
