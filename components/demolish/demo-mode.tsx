@@ -4,7 +4,8 @@ import React, { useState, useEffect, useMemo, useRef } from "react";
 import { 
   ShieldAlert, 
   Trash2, 
-  Skull, 
+  Orbit,
+
   CheckCircle2, 
   AlertTriangle, 
   Play, 
@@ -906,7 +907,7 @@ export function DemoModeSimulation() {
       <header className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-border pb-5 mb-8 gap-4" id="tool_header">
         <div className="flex items-center gap-3">
           <div className="p-2.5 bg-red-500/10 border border-red-500/40 rounded-xl animate-pulse text-red-500">
-            <Skull className="h-7 w-7" />
+            <Orbit className="h-7 w-7" />
           </div>
           <div>
             <div className="flex items-center gap-2">
@@ -1459,7 +1460,7 @@ export function DemoModeSimulation() {
                           className="text-xs bg-purple-500/15 border border-purple-500/30 hover:bg-purple-500/30 text-purple-300 font-semibold px-2.5 py-1 rounded-lg flex items-center gap-1 transition"
                           id="exit_soroban_defi_btn"
                         >
-                          <Skull className="h-3 w-3" />
+                          <Orbit className="h-3 w-3" />
                           Deconstruct Smart Contracts
                         </button>
                       )}
@@ -1818,7 +1819,7 @@ export function DemoModeSimulation() {
                     className="absolute top-1 bottom-1 w-12 bg-gradient-to-br from-red-500 to-red-600 rounded-lg shadow-lg flex items-center justify-center text-foreground border border-red-400 select-none transition-all duration-75 h-10"
                     id="slider_drag_node"
                   >
-                    <Skull className="h-5 w-5 animate-pulse" />
+                    <Orbit className="h-5 w-5 animate-pulse" />
                   </div>
 
                   {/* text hints */}
@@ -1873,7 +1874,7 @@ export function DemoModeSimulation() {
             </button>
             
             <div className="flex items-center gap-3">
-              <Skull className="h-6 w-6 text-amber-600" />
+              <Orbit className="h-6 w-6 text-amber-600" />
               <h2 className="text-lg font-bold text-foreground uppercase tracking-wider">Stellar Account Merger Demolition Checklist</h2>
             </div>
             

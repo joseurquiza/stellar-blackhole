@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Skull, FlaskConical, ShieldCheck, Radio, Wrench, AlertTriangle } from "lucide-react"
+import { Orbit, FlaskConical, ShieldCheck, Radio, Wrench, AlertTriangle } from "lucide-react"
 import { LiveWizard } from "@/components/demolish/live-wizard"
 import { DemoModeSimulation } from "@/components/demolish/demo-mode"
 import { DemolishFaq } from "@/components/demolish/demolish-faq"
@@ -99,7 +99,7 @@ export function BlackholeTool() {
                   style={{ background: "radial-gradient(circle, hsl(var(--nova-core) / 0.5), transparent 70%)" }}
                   aria-hidden
                 />
-                <Skull className="relative h-6 w-6 text-primary" />
+                <Orbit className="relative h-6 w-6 text-primary" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold tracking-tight text-balance sm:text-3xl">
