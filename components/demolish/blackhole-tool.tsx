@@ -1,13 +1,13 @@
 "use client"
 
 import { useState } from "react"
-import { Orbit, FlaskConical, ShieldCheck, Radio, Wrench, AlertTriangle, Activity, Search } from "lucide-react"
+import { Orbit, FlaskConical, ShieldCheck, Radio, Wrench, AlertTriangle, Activity, Search, HelpCircle } from "lucide-react"
 import { LiveWizard } from "@/components/demolish/live-wizard"
 import { DemoModeSimulation } from "@/components/demolish/demo-mode"
 import { DemolishFaq } from "@/components/demolish/demolish-faq"
 import { ThemeToggle } from "@/components/theme-toggle"
 
-type ToolMode = "live" | "simulate" | "toolkit"
+type ToolMode = "live" | "simulate" | "toolkit" | "faq"
 type ToolkitTool = "sandbox" | "live"
 
 const MODE_META: Record<
@@ -64,6 +64,17 @@ const MODE_META: Record<
     frame: "",
     banner: null,
   },
+  faq: {
+    label: "FAQ",
+    description: "Answers to common questions about closing and merging Stellar accounts",
+    badge: "HELP",
+    iconWrap: "bg-primary/10 ring-1 ring-primary/30",
+    icon: "text-primary",
+    statusBar: "border-border bg-muted/40",
+    badgeClass: "bg-muted-foreground/15 text-muted-foreground",
+    frame: "",
+    banner: null,
+  },
 }
 
 export function BlackholeTool() {
@@ -110,9 +121,10 @@ export function BlackholeTool() {
           </div>
 
           <nav aria-label="Tool mode" className="space-y-1">
-            {(["live", "simulate", "toolkit"] as ToolMode[]).map((m) => {
+            {(["live", "simulate", "toolkit", "faq"] as ToolMode[]).map((m) => {
               const active = mode === m
-              const Icon = m === "live" ? Radio : m === "simulate" ? FlaskConical : Wrench
+              const Icon =
+                m === "live" ? Radio : m === "simulate" ? FlaskConical : m === "toolkit" ? Wrench : HelpCircle
               return (
                 <div key={m}>
                   <button
@@ -197,8 +209,10 @@ export function BlackholeTool() {
                   <Radio className={`h-4 w-4 ${MODE_META[mode].icon}`} />
                 ) : mode === "simulate" ? (
                   <FlaskConical className={`h-4 w-4 ${MODE_META[mode].icon}`} />
-                ) : (
+                ) : mode === "toolkit" ? (
                   <Wrench className={`h-4 w-4 ${MODE_META[mode].icon}`} />
+                ) : (
+                  <HelpCircle className={`h-4 w-4 ${MODE_META[mode].icon}`} />
                 )}
               </div>
               <div className="flex flex-col">
@@ -217,6 +231,8 @@ export function BlackholeTool() {
 
           {mode === "toolkit" ? (
             <DemoModeSimulation explorerMode={toolkitTool} onExplorerModeChange={setToolkitTool} hideModeToggle />
+          ) : mode === "faq" ? (
+            <DemolishFaq embedded />
           ) : (
             <div className={MODE_META[mode].frame}>
               {MODE_META[mode].banner && (
@@ -241,7 +257,10 @@ export function BlackholeTool() {
             </div>
           )}
 
-          <DemolishFaq />
+          {/* The full FAQ keeps living at the bottom of the working modes for
+              answer-engine reach; in dedicated FAQ mode it is the main content
+              instead, so we don't render it twice. */}
+          {mode !== "faq" && <DemolishFaq />}
         </div>
       </div>
     </main>
