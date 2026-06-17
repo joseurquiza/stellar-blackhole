@@ -55,9 +55,12 @@ export const demolishFaq: { question: string; answer: string }[] = [
   },
 ]
 
-export function DemolishFaq() {
+export function DemolishFaq({ embedded = false }: { embedded?: boolean } = {}) {
   return (
-    <section aria-labelledby="demolish-faq-heading" className="mt-14 border-t pt-10">
+    <section
+      aria-labelledby="demolish-faq-heading"
+      className={embedded ? "" : "mt-14 border-t pt-10"}
+    >
       <div className="mb-6 flex items-center gap-2.5">
         <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20">
           <HelpCircle className="h-5 w-5 text-primary" />

@@ -219,7 +219,15 @@ function mapAuditToAccountState(audit: AccountAudit): AccountState {
   };
 }
 
-export function DemoModeSimulation() {
+export function DemoModeSimulation({
+  explorerMode: controlledMode,
+  onExplorerModeChange,
+  hideModeToggle = false,
+}: {
+  explorerMode?: "sandbox" | "live"
+  onExplorerModeChange?: (mode: "sandbox" | "live") => void
+  hideModeToggle?: boolean
+} = {}) {
   // --- Sandbox Scenario Preloads ---
   const scenarios: Record<string, AccountState> = {
     trader: {
@@ -349,7 +357,15 @@ export function DemoModeSimulation() {
 
   // --- Core Application States ---
   const [selectedScenarioKey, setSelectedScenarioKey] = useState<string>("trader");
-  const [explorerMode, setExplorerMode] = useState<"sandbox" | "live">("live");
+  const [internalExplorerMode, setInternalExplorerMode] = useState<"sandbox" | "live">("live");
+  // When the parent provides explorerMode, the component is controlled (the
+  // sidebar submenu drives which Toolkit tool is shown); otherwise it manages
+  // its own internal toggle.
+  const explorerMode = controlledMode ?? internalExplorerMode;
+  const setExplorerMode = (mode: "sandbox" | "live") => {
+    if (onExplorerModeChange) onExplorerModeChange(mode);
+    if (controlledMode === undefined) setInternalExplorerMode(mode);
+  };
   const [liveAddressInput, setLiveAddressInput] = useState<string>("");
   const [liveNetwork, setLiveNetwork] = useState<"testnet" | "mainnet">("testnet");
   const [activeTab, setActiveTab] = useState<"balances" | "defi" | "claims" | "access">("balances");
@@ -919,6 +935,7 @@ export function DemoModeSimulation() {
         </div>
 
         {/* Real Horizon Connection toggle or Demo mode selection */}
+        {!hideModeToggle && (
         <div className="flex flex-wrap items-center gap-2 bg-muted border border-border p-1 rounded-xl">
           <button 
             onClick={() => setExplorerMode("sandbox")}
@@ -937,6 +954,7 @@ export function DemoModeSimulation() {
             Account Explorer
           </button>
         </div>
+        )}
       </header>
 
       {/* --- Help Section Info Widget --- */}
