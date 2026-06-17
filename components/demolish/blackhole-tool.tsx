@@ -102,7 +102,7 @@ export function BlackholeTool() {
         aria-hidden
       />
 
-      <div className="relative mx-auto flex w-full max-w-screen-2xl flex-col gap-6 px-4 py-10 sm:px-6 sm:py-14 lg:flex-row lg:gap-8 lg:px-10 xl:px-16">
+      <div className="relative flex w-full flex-col gap-6 px-4 py-10 sm:px-6 sm:py-14 lg:flex-row lg:gap-8 lg:px-10 xl:px-16 2xl:px-24">
         {/* ===================== LEFT SIDEBAR ===================== */}
         <aside className="lg:sticky lg:top-10 lg:h-fit lg:w-64 lg:shrink-0">
           <div className="flex items-center gap-3 px-1 pb-5">
