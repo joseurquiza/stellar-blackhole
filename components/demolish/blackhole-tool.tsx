@@ -256,11 +256,6 @@ export function BlackholeTool() {
               <LiveWizard simulate={mode === "simulate"} />
             </div>
           )}
-
-          {/* The full FAQ keeps living at the bottom of the working modes for
-              answer-engine reach; in dedicated FAQ mode it is the main content
-              instead, so we don't render it twice. */}
-          {mode !== "faq" && <DemolishFaq />}
         </div>
       </div>
     </main>
