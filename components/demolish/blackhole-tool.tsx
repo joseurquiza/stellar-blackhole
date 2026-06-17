@@ -1,13 +1,14 @@
 "use client"
 
 import { useState } from "react"
-import { Orbit, FlaskConical, ShieldCheck, Radio, Wrench, AlertTriangle } from "lucide-react"
+import { Orbit, FlaskConical, ShieldCheck, Radio, Wrench, AlertTriangle, Activity, Search } from "lucide-react"
 import { LiveWizard } from "@/components/demolish/live-wizard"
 import { DemoModeSimulation } from "@/components/demolish/demo-mode"
 import { DemolishFaq } from "@/components/demolish/demolish-faq"
 import { ThemeToggle } from "@/components/theme-toggle"
 
 type ToolMode = "live" | "simulate" | "toolkit"
+type ToolkitTool = "sandbox" | "live"
 
 const MODE_META: Record<
   ToolMode,
@@ -67,6 +68,7 @@ const MODE_META: Record<
 
 export function BlackholeTool() {
   const [mode, setMode] = useState<ToolMode>("live")
+  const [toolkitTool, setToolkitTool] = useState<ToolkitTool>("live")
 
   return (
     <main className="demolish-theme relative min-h-screen overflow-hidden bg-background">
@@ -89,31 +91,96 @@ export function BlackholeTool() {
         aria-hidden
       />
 
-      <div className="relative mx-auto w-full max-w-screen-2xl px-4 py-10 sm:px-6 sm:py-14 lg:px-10 xl:px-16">
-        <header className="mb-8 space-y-5">
-          <div className="flex items-start justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 ring-1 ring-primary/30">
-                <div
-                  className="absolute inset-0 rounded-xl blur-md"
-                  style={{ background: "radial-gradient(circle, hsl(var(--nova-core) / 0.5), transparent 70%)" }}
-                  aria-hidden
-                />
-                <Orbit className="relative h-6 w-6 text-primary" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold tracking-tight text-balance sm:text-3xl">
-                  Stellar BlackHole
-                </h1>
-                <p className="mt-0.5 text-sm text-muted-foreground text-pretty">
-                  Spaghettify your wallet in the stellar black hole — non-custodial cleanup and account merge.
-                </p>
-              </div>
+      <div className="relative mx-auto flex w-full max-w-screen-2xl flex-col gap-6 px-4 py-10 sm:px-6 sm:py-14 lg:flex-row lg:gap-8 lg:px-10 xl:px-16">
+        {/* ===================== LEFT SIDEBAR ===================== */}
+        <aside className="lg:sticky lg:top-10 lg:h-fit lg:w-64 lg:shrink-0">
+          <div className="flex items-center gap-3 px-1 pb-5">
+            <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 ring-1 ring-primary/30">
+              <div
+                className="absolute inset-0 rounded-xl blur-md"
+                style={{ background: "radial-gradient(circle, hsl(var(--nova-core) / 0.5), transparent 70%)" }}
+                aria-hidden
+              />
+              <Orbit className="relative h-5 w-5 text-primary" />
             </div>
-            <ThemeToggle className="shrink-0" />
+            <div className="min-w-0">
+              <h1 className="truncate text-lg font-bold tracking-tight">Stellar BlackHole</h1>
+              <p className="truncate text-xs text-muted-foreground">Non-custodial account demolition</p>
+            </div>
           </div>
 
-          <div className="flex items-center gap-2 rounded-lg border border-primary/15 bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
+          <nav aria-label="Tool mode" className="space-y-1">
+            {(["live", "simulate", "toolkit"] as ToolMode[]).map((m) => {
+              const active = mode === m
+              const Icon = m === "live" ? Radio : m === "simulate" ? FlaskConical : Wrench
+              return (
+                <div key={m}>
+                  <button
+                    type="button"
+                    aria-current={active ? "page" : undefined}
+                    onClick={() => setMode(m)}
+                    className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                      active
+                        ? m === "live"
+                          ? "bg-destructive/10 text-destructive ring-1 ring-destructive/30"
+                          : "bg-foreground/5 text-foreground ring-1 ring-border"
+                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                    }`}
+                  >
+                    <Icon className="h-4 w-4 shrink-0" />
+                    <span className="flex-1 text-left">{MODE_META[m].label}</span>
+                    <span
+                      className={`inline-flex items-center rounded px-1.5 py-0.5 text-[9px] font-bold uppercase leading-none tracking-wider ${MODE_META[m].badgeClass}`}
+                    >
+                      {MODE_META[m].badge}
+                    </span>
+                  </button>
+
+                  {/* Toolkit submenu: each available tool */}
+                  {m === "toolkit" && mode === "toolkit" && (
+                    <ul className="mt-1 space-y-0.5 border-l border-border pl-3 ml-4">
+                      {(
+                        [
+                          { id: "sandbox" as ToolkitTool, label: "Simulation Sandbox", icon: Activity },
+                          { id: "live" as ToolkitTool, label: "Account Explorer", icon: Search },
+                        ]
+                      ).map((tool) => {
+                        const toolActive = toolkitTool === tool.id
+                        const ToolIcon = tool.icon
+                        return (
+                          <li key={tool.id}>
+                            <button
+                              type="button"
+                              aria-current={toolActive ? "page" : undefined}
+                              onClick={() => setToolkitTool(tool.id)}
+                              className={`flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-xs transition-colors ${
+                                toolActive
+                                  ? "bg-muted font-medium text-foreground"
+                                  : "text-muted-foreground hover:text-foreground"
+                              }`}
+                            >
+                              <ToolIcon className="h-3.5 w-3.5 shrink-0" />
+                              <span className="text-left">{tool.label}</span>
+                            </button>
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  )}
+                </div>
+              )
+            })}
+          </nav>
+
+          <div className="mt-5 flex items-center justify-between gap-2 border-t border-border px-1 pt-4">
+            <span className="text-xs text-muted-foreground">Theme</span>
+            <ThemeToggle />
+          </div>
+        </aside>
+
+        {/* ===================== MAIN CONTENT ===================== */}
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-2 rounded-lg border border-primary/15 bg-primary/5 px-3 py-2 text-xs text-muted-foreground mb-5">
             <ShieldCheck className="h-4 w-4 shrink-0 text-primary" />
             <span className="text-pretty">
               Your secret keys are used only in this browser tab to sign transactions. They are never sent to any
@@ -122,12 +189,10 @@ export function BlackholeTool() {
           </div>
 
           <div
-            className={`flex flex-col gap-3 rounded-xl border p-3 shadow-sm transition-colors sm:flex-row sm:items-center sm:justify-between ${MODE_META[mode].statusBar}`}
+            className={`mb-6 flex flex-col gap-3 rounded-xl border p-3 shadow-sm transition-colors sm:flex-row sm:items-center sm:justify-between ${MODE_META[mode].statusBar}`}
           >
             <div className="flex items-center gap-2.5">
-              <div
-                className={`flex h-8 w-8 items-center justify-center rounded-lg ${MODE_META[mode].iconWrap}`}
-              >
+              <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${MODE_META[mode].iconWrap}`}>
                 {mode === "live" ? (
                   <Radio className={`h-4 w-4 ${MODE_META[mode].icon}`} />
                 ) : mode === "simulate" ? (
@@ -148,63 +213,36 @@ export function BlackholeTool() {
                 <span className="text-xs text-muted-foreground">{MODE_META[mode].description}</span>
               </div>
             </div>
+          </div>
 
-            <div
-              role="tablist"
-              aria-label="Tool mode"
-              className="inline-flex shrink-0 rounded-lg border bg-muted/50 p-0.5 text-xs font-medium"
-            >
-              {(["live", "simulate", "toolkit"] as ToolMode[]).map((m) => {
-                const selectedClass =
-                  m === "live"
-                    ? "bg-destructive text-destructive-foreground shadow-sm"
-                    : "bg-foreground text-background shadow-sm"
-                return (
-                  <button
-                    key={m}
-                    type="button"
-                    role="tab"
-                    aria-selected={mode === m}
-                    onClick={() => setMode(m)}
-                    className={`rounded-md px-4 py-1.5 capitalize transition-colors ${
-                      mode === m ? selectedClass : "text-muted-foreground hover:text-foreground"
+          {mode === "toolkit" ? (
+            <DemoModeSimulation explorerMode={toolkitTool} onExplorerModeChange={setToolkitTool} hideModeToggle />
+          ) : (
+            <div className={MODE_META[mode].frame}>
+              {MODE_META[mode].banner && (
+                <div
+                  className={`mb-4 flex items-center gap-2.5 rounded-lg border px-3 py-2.5 ${MODE_META[mode].banner!.wrap}`}
+                >
+                  {mode === "live" ? (
+                    <AlertTriangle className="h-4 w-4 shrink-0 text-destructive" />
+                  ) : (
+                    <FlaskConical className="h-4 w-4 shrink-0 text-muted-foreground" />
+                  )}
+                  <p
+                    className={`text-xs font-medium text-pretty ${
+                      mode === "live" ? "text-destructive" : "text-muted-foreground"
                     }`}
                   >
-                    {m}
-                  </button>
-                )
-              })}
+                    {MODE_META[mode].banner!.text}
+                  </p>
+                </div>
+              )}
+              <LiveWizard simulate={mode === "simulate"} />
             </div>
-          </div>
-        </header>
+          )}
 
-        {mode === "toolkit" ? (
-          <DemoModeSimulation />
-        ) : (
-          <div className={MODE_META[mode].frame}>
-            {MODE_META[mode].banner && (
-              <div
-                className={`mb-4 flex items-center gap-2.5 rounded-lg border px-3 py-2.5 ${MODE_META[mode].banner!.wrap}`}
-              >
-                {mode === "live" ? (
-                  <AlertTriangle className="h-4 w-4 shrink-0 text-destructive" />
-                ) : (
-                  <FlaskConical className="h-4 w-4 shrink-0 text-muted-foreground" />
-                )}
-                <p
-                  className={`text-xs font-medium text-pretty ${
-                    mode === "live" ? "text-destructive" : "text-muted-foreground"
-                  }`}
-                >
-                  {MODE_META[mode].banner!.text}
-                </p>
-              </div>
-            )}
-            <LiveWizard simulate={mode === "simulate"} />
-          </div>
-        )}
-
-        <DemolishFaq />
+          <DemolishFaq />
+        </div>
       </div>
     </main>
   )
