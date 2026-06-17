@@ -142,7 +142,7 @@ export function BlackholeTool() {
                     <Icon className="h-4 w-4 shrink-0" />
                     <span className="flex-1 text-left">{MODE_META[m].label}</span>
                     <span
-                      className={`inline-flex items-center rounded px-1.5 py-0.5 text-[9px] font-bold uppercase leading-none tracking-wider ${MODE_META[m].badgeClass}`}
+                      className={`inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-bold uppercase leading-none tracking-wider ${MODE_META[m].badgeClass}`}
                     >
                       {MODE_META[m].badge}
                     </span>
