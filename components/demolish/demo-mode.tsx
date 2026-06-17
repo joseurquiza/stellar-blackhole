@@ -928,7 +928,7 @@ export function DemoModeSimulation({
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-xl md:text-2xl font-bold font-sans tracking-tight text-foreground mb-0.5">STELLAR DEMOLITION KIT</h1>
-              <span className="font-mono text-[9px] bg-red-950 text-red-400 border border-red-900 px-1.5 py-0.5 rounded uppercase">Mainnet v1.4</span>
+              <span className="font-mono text-[10px] bg-red-950 text-red-400 border border-red-900 px-1.5 py-0.5 rounded uppercase">Mainnet v1.4</span>
             </div>
             <p className="text-xs text-muted-foreground font-sans">Strategic wallet demolition, asset liquidation, and compliance merging toolkit</p>
           </div>
@@ -1358,7 +1358,7 @@ export function DemoModeSimulation({
                               <div className="text-xs font-semibold text-foreground flex items-center gap-1.5">
                                 {t.assetCode} Trustline
                                 {t.isSoroban && (
-                                  <span className="text-[9px] bg-purple-950/40 text-purple-400 border border-purple-900 px-1.5 py-0.1 rounded uppercase font-mono">Soroban SAC</span>
+                                  <span className="text-[10px] bg-purple-950/40 text-purple-400 border border-purple-900 px-1.5 py-0.1 rounded uppercase font-mono">Soroban SAC</span>
                                 )}
                               </div>
                               <div className="text-[10px] font-mono text-muted-foreground max-w-[200px] md:max-w-xs truncate" title={t.assetIssuer}>
@@ -1408,7 +1408,7 @@ export function DemoModeSimulation({
                           <div key={idx} className="bg-card/80 border border-border p-3 rounded-xl flex flex-col justify-between">
                             <div className="flex justify-between items-center border-b border-border pb-1.5 mb-2">
                               <span className="font-mono text-[10px] bg-muted text-muted-foreground px-1.5 py-0.5 rounded font-bold">OFFER #{o.id}</span>
-                              <span className="text-[9px] uppercase px-1.5 py-0.5 bg-amber-500/10 text-amber-600 border border-amber-500/20 font-bold font-mono">DEX</span>
+                              <span className="text-[10px] uppercase px-1.5 py-0.5 bg-amber-500/10 text-amber-600 border border-amber-500/20 font-bold font-mono">DEX</span>
                             </div>
                             <div className="flex items-center justify-between text-xs font-mono">
                               <span className="text-muted-foreground">Selling:</span>
@@ -1495,7 +1495,7 @@ export function DemoModeSimulation({
                             <div>
                               <div className="flex justify-between items-center mb-1.5">
                                 <span className="font-bold text-xs text-purple-400">{sp.protocol}</span>
-                                <span className="text-[9px] uppercase px-1.5 py-0.5 bg-purple-500/20 text-purple-300 rounded font-bold font-mono">{sp.type}</span>
+                                <span className="text-[10px] uppercase px-1.5 py-0.5 bg-purple-500/20 text-purple-300 rounded font-bold font-mono">{sp.type}</span>
                               </div>
                               <div className="text-xs text-muted-foreground font-mono mt-2">
                                 <span className="text-muted-foreground">Supplied:</span> <span className="text-foreground font-bold">{sp.supplied} {sp.symbol}</span>
@@ -1675,7 +1675,7 @@ export function DemoModeSimulation({
                     <div className="space-y-1">
                       <div className="flex justify-between items-center">
                         <label className="text-[10px] uppercase text-muted-foreground font-bold font-mono block">Exchange Payment MEMO (Required)</label>
-                        <span className="text-[9px] text-red-500 font-bold">MUTISIG REQUIRED</span>
+                        <span className="text-[10px] text-red-500 font-bold">MUTISIG REQUIRED</span>
                       </div>
                       <input 
                         type="text" 
@@ -1799,7 +1799,7 @@ export function DemoModeSimulation({
                 {!demolitionComplete && (
                   <div className="w-full md:w-auto flex flex-col md:flex-row gap-2">
                     <div className="space-y-1 text-left">
-                      <div className="text-[9px] uppercase tracking-wide text-muted-foreground font-bold">Type &quot;DEMOLISH&quot; to authorize:</div>
+                      <div className="text-[10px] uppercase tracking-wide text-muted-foreground font-bold">Type &quot;DEMOLISH&quot; to authorize:</div>
                       <input 
                         type="text" 
                         value={confirmInput}
