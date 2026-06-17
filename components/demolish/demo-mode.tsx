@@ -977,17 +977,24 @@ export function DemoModeSimulation({
         </button>
       </section>
 
-      {/* --- Main Dashboard Body Grid --- */}
-      <main className="grid grid-cols-1 lg:grid-cols-12 gap-8 flex-1">
+      {/* --- Main Dashboard Body: single top-to-bottom numbered flow --- */}
+      {/* The two <section> wrappers use `contents` so their panels become
+          direct flex children of <main>, letting us order them into a logical
+          step sequence (1 choose account, 2 review holdings, 3 safety,
+          4 destination, 5 simulate) without moving the JSX around. */}
+      <main className="flex flex-col gap-8 flex-1 max-w-5xl mx-auto w-full">
         
-        {/* ================= LEFT COLUMN: CONTROL & SAFETY ================= */}
-        <section className="col-span-1 lg:col-span-12 xl:col-span-5 space-y-8 flex flex-col justify-start">
+        {/* ================= STEP PANELS: CONTROL & SAFETY ================= */}
+        <section className="contents">
           
           {/* --- Mode Panel Controller --- */}
-          <div className="bg-card/95 border border-border p-5 rounded-2xl relative overflow-hidden shadow-xl" id="inspect_panel">
-            <h3 className="text-sm font-semibold font-sans uppercase tracking-wider text-muted-foreground mb-4 flex items-center gap-2">
-              <span className="w-1.5 h-3 bg-red-500 rounded-sm"></span>
-              Account Discovery & Inspector
+          <div className="order-1 bg-card/95 border border-border p-5 rounded-2xl relative overflow-hidden shadow-xl" id="inspect_panel">
+            <h3 className="text-sm font-semibold font-sans mb-4 flex items-center gap-2.5">
+              <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary text-xs font-bold">1</span>
+              <span className="flex flex-col">
+                <span className="text-foreground">{explorerMode === "sandbox" ? "Pick a sample account" : "Look up an account"}</span>
+                <span className="text-[11px] font-normal normal-case tracking-normal text-muted-foreground">{explorerMode === "sandbox" ? "Choose a scenario to explore" : "Enter a Stellar address to inspect"}</span>
+              </span>
             </h3>
 
             {/* Sandbox Mode Profiles */}
@@ -1103,12 +1110,15 @@ export function DemoModeSimulation({
             </div>
           </div>
 
-          {/* --- Safety & Audit Mitigation Analysis (Phase 2) --- */}
-          <div className="bg-card/95 border border-border p-5 rounded-2xl" id="safety_analysis_module">
+          {/* --- Safety & Audit Mitigation Analysis --- */}
+          <div className="order-3 bg-card/95 border border-border p-5 rounded-2xl" id="safety_analysis_module">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-semibold font-sans uppercase tracking-wider text-foreground flex items-center gap-2">
-                <span className={`w-1.5 h-3 rounded-sm ${safetyCheck.canDemolish ? "bg-green-500" : "bg-red-500"}`}></span>
-                Phase 2: Security & Safety Analysis
+              <h3 className="text-sm font-semibold font-sans flex items-center gap-2.5">
+                <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary text-xs font-bold">3</span>
+                <span className="flex flex-col">
+                  <span className="text-foreground">Safety check</span>
+                  <span className="text-[11px] font-normal normal-case tracking-normal text-muted-foreground">What must be cleared before merging</span>
+                </span>
               </h3>
               <span className={`text-[10px] uppercase px-2 py-0.5 rounded font-mono font-bold ${safetyCheck.canDemolish ? "bg-green-500/10 text-green-400 border border-green-500/30" : "bg-red-500/10 text-red-400 border border-red-500/30"}`}>
                 {safetyCheck.canDemolish ? "Demolish Ready" : "Merge Blocked"}
@@ -1189,11 +1199,14 @@ export function DemoModeSimulation({
 
           {/* --- Interactive Signers Configuration / Signature Collector --- */}
           {safetyCheck.hasMultisig && (
-            <div className="bg-card/95 border border-border p-5 rounded-2xl space-y-4" id="multisig_signer_collector">
+            <div className="order-4 bg-card/95 border border-border p-5 rounded-2xl space-y-4" id="multisig_signer_collector">
               <div>
-                <h3 className="text-sm font-semibold font-sans uppercase tracking-wider text-foreground mb-1 flex items-center gap-2">
-                  <Users className="h-4 w-4 text-cyan-400" />
-                  Multisig Signature Gathering
+                <h3 className="text-sm font-semibold font-sans mb-1 flex items-center gap-2.5">
+                  <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary text-xs font-bold">3b</span>
+                  <span className="flex items-center gap-1.5 text-foreground">
+                    <Users className="h-4 w-4 text-cyan-400" />
+                    Collect multisig signatures
+                  </span>
                 </h3>
                 <p className="text-[11px] text-muted-foreground">Account has high thresholds and signers. Merging balances requires signatures weightsum ≥ {safetyCheck.thresholdNeeded}.</p>
               </div>
@@ -1259,11 +1272,18 @@ export function DemoModeSimulation({
           )}
         </section>
 
-        {/* ================= RIGHT COLUMN: INTERACTIVE TABS & POSITION DRY-RUNS ================= */}
-        <section className="col-span-1 lg:col-span-12 xl:col-span-7 space-y-8">
+        {/* ================= STEP PANELS: HOLDINGS, DESTINATION & SIMULATE ================= */}
+        <section className="contents">
           
-          {/* --- Interactive ledger tabs (Phase 1 Deep Dive & Action triggers) --- */}
-          <div className="bg-card/95 border border-border rounded-3xl overflow-hidden shadow-xl" id="asset_ledger_viewer">
+          {/* --- Interactive ledger tabs: review what's in the account --- */}
+          <div className="order-2 bg-card/95 border border-border rounded-3xl overflow-hidden shadow-xl" id="asset_ledger_viewer">
+            <div className="flex items-center gap-2.5 px-5 pt-4 pb-1">
+              <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary text-xs font-bold">2</span>
+              <span className="flex flex-col">
+                <span className="text-sm font-semibold text-foreground">Review what&apos;s in the account</span>
+                <span className="text-[11px] text-muted-foreground">Assets, DeFi positions, claims, signers &amp; data</span>
+              </span>
+            </div>
             
             {/* Header Tabs Navigation */}
             <div className="bg-muted/60 p-2 border-b border-border flex justify-between items-center flex-wrap gap-2">
@@ -1607,13 +1627,19 @@ export function DemoModeSimulation({
             </div>
           </div>
 
-          {/* --- Exchange Transfer Problem Section (Phase 7) --- */}
-          <div className="bg-card/95 border border-border p-6 rounded-3xl space-y-4" id="relay_mediator_section">
+          {/* --- Exchange Transfer Problem Section: where funds go --- */}
+          <div className="order-5 bg-card/95 border border-border p-6 rounded-3xl space-y-4" id="relay_mediator_section">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-border pb-3">
               <div>
-                <h3 className="text-sm font-semibold font-sans uppercase tracking-wider text-amber-600 flex items-center gap-2">
-                  <ShieldAlert className="h-4 w-4 shrink-0" />
-                  Phase 7: Resolve Exchange Transfer Deficit
+                <h3 className="text-sm font-semibold font-sans flex items-center gap-2.5">
+                  <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary text-xs font-bold">4</span>
+                  <span className="flex flex-col">
+                    <span className="flex items-center gap-1.5 text-foreground">
+                      <ShieldAlert className="h-4 w-4 shrink-0 text-amber-600" />
+                      Choose where the funds go
+                    </span>
+                    <span className="text-[11px] font-normal normal-case tracking-normal text-muted-foreground">Direct wallet, or route via a mediator for exchanges</span>
+                  </span>
                 </h3>
                 <p className="text-[11px] text-muted-foreground mt-1 leading-relaxed">
                   Most modern spot exchanges (Coinbase, Binance, Kraken) do <b>NOT</b> detect or credit standard <code>ACCOUNT_MERGE</code> ledger endpoints, meaning funds merged directly will be lost forever in their omnibus addresses.
@@ -1712,11 +1738,14 @@ export function DemoModeSimulation({
           </div>
 
           {/* --- Bottom interactive dry-run inspector / json builder & demolish final --- */}
-          <div className="bg-card/95 border border-border rounded-3xl overflow-hidden shadow-xl" id="comp_terminal">
+          <div className="order-6 bg-card/95 border border-border rounded-3xl overflow-hidden shadow-xl" id="comp_terminal">
             <div className="bg-muted/60 px-5 py-3 border-b border-border flex justify-between items-center">
-              <div className="flex items-center gap-2">
-                <span className="flex h-2 w-2 rounded-full bg-red-500 animate-pulse"></span>
-                <h3 className="text-xs font-semibold uppercase font-mono tracking-wider text-foreground">Terminal Command Compiler</h3>
+              <div className="flex items-center gap-2.5">
+                <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary text-xs font-bold">5</span>
+                <span className="flex flex-col">
+                  <h3 className="text-sm font-semibold text-foreground">Simulate the cleanup</h3>
+                  <span className="text-[11px] text-muted-foreground">Preview every step, then run the demolition</span>
+                </span>
               </div>
               <button 
                 onClick={compileDryRun}
