@@ -1,7 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { Orbit, FlaskConical, ShieldCheck, Radio, Wrench, AlertTriangle, Activity, Search, HelpCircle } from "lucide-react"
+import { Orbit, FlaskConical, ShieldCheck, Radio, Wrench, AlertTriangle, Activity, Search, HelpCircle, Code2 } from "lucide-react"
+import Link from "next/link"
 import { LiveWizard } from "@/components/demolish/live-wizard"
 import { DemoModeSimulation } from "@/components/demolish/demo-mode"
 import { DemolishFaq } from "@/components/demolish/demolish-faq"
@@ -184,7 +185,20 @@ export function BlackholeTool() {
             })}
           </nav>
 
-          <div className="mt-5 flex items-center justify-between gap-2 border-t border-border px-1 pt-4">
+          <div className="mt-4 border-t border-border pt-3">
+            <Link
+              href="/developers/docs"
+              className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              <Code2 className="h-4 w-4 shrink-0" />
+              <span className="flex-1 text-left">Developers / API</span>
+              <span className="inline-flex items-center rounded bg-muted-foreground/15 px-1.5 py-0.5 text-[10px] font-bold uppercase leading-none tracking-wider text-muted-foreground">
+                New
+              </span>
+            </Link>
+          </div>
+
+          <div className="mt-2 flex items-center justify-between gap-2 border-t border-border px-1 pt-4">
             <span className="text-xs text-muted-foreground">Theme</span>
             <ThemeToggle />
           </div>
