@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -48,22 +48,11 @@ const STAGE_LABELS: Record<(typeof STAGES)[number], string> = {
   result: "Result",
 }
 
-export function LiveWizard({
-  simulate = false,
-  onStageChange,
-}: {
-  simulate?: boolean
-  // Optional hook used by the embeddable widget to notify the host page.
-  onStageChange?: (stage: (typeof STAGES)[number]) => void
-}) {
+export function LiveWizard({ simulate = false }: { simulate?: boolean }) {
   const d = useDemolisher({ simulate })
   const { state } = d
   const [pubInput, setPubInput] = useState("")
   const [confirmText, setConfirmText] = useState("")
-
-  useEffect(() => {
-    onStageChange?.(state.stage)
-  }, [state.stage, onStageChange])
 
   const stageIndex = STAGES.indexOf(state.stage)
   const hasBlockers = (state.plan?.blockers.length ?? 0) > 0
